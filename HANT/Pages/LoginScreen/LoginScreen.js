@@ -1,11 +1,14 @@
 import React from "react";
 import { View, Text } from "react-native";
-
+import { Actions } from "react-native-router-flux";
+function goToTest() {
+    Actions.Test();
+}
 const LoginScreen = () => {
     return (
-        <View style={{padding: 50}}>
-            <Text>anas</Text>
-        </View>
+        <TouchableOpacity style = {{ margin: 128 }} onPress = {goToTest}>
+            <Text>This is Login Page, Click to Go to Test</Text>
+        </TouchableOpacity>
     )
 }
 
