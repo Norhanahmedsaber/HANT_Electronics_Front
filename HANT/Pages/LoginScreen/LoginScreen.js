@@ -21,7 +21,15 @@ const LoginScreen = ({ navigation }) => {
        })
         .then( (res) =>{
             return res.json();
-     }).then(response => console.log(response)).catch((error)=>{
+     }).then(response => {
+        console.log(response)
+        if(response.message==="Logged In"){
+            navigation.navigate("HomeScreen")
+        }
+        else {
+            alert(response.message)
+        }
+     }).catch((error)=>{
         console.log(error)
      })
      } 
