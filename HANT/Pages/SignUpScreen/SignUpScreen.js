@@ -13,44 +13,45 @@ const SignUpScreen = ({ navigation }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
-  
+
   const usernameChanged = (value) => {
-    setUsername(value)
-  }
+    setUsername(value);
+  };
   const passwordChanged = (value) => {
-    setPassword(value)
-  }
+    setPassword(value);
+  };
   const emailChanged = (value) => {
-    setEmail(value)
-  }
+    setEmail(value);
+  };
   const valid = () => {
     return true;
-  }
+  };
   const signUpClicked = () => {
-    if(valid()) {
+    if (valid()) {
       fetch("http://192.168.1.137:3000/signup", {
         method: "POST",
-        headers: {'Content-Type': 'application/json'},
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           username: username,
           email: email,
-          password: password
-        })
-        
-      }).then((response) => {
-        return response.json()
+          password: password,
+        }),
       })
-      .then((res) => {
-        if(res.Data === "Done") {
-         navigation.navigate("HomeScreen")
-        }else {
-          alert("Error")
-        }
-      }).catch((error) => {
-        console.log(error);
-    })
+        .then((response) => {
+          return response.json();
+        })
+        .then((res) => {
+          if (res.Data === "Done") {
+            navigation.navigate("HomeScreen");
+          } else {
+            alert("Error");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     }
-  }
+  };
 
   return (
     <View style={styles.container}>
