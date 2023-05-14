@@ -4,10 +4,24 @@ import { View, Text, Button, TextInput, StyleSheet } from "react-native";
 const LoginScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
-
-      
-
-
+      <View styles={styles.buttonsContainer}>
+        <View>
+          <Text>sayed</Text>
+        </View>
+        <View style={styles.catButton}>
+          <Button
+            onPress={() => navigation.navigate("ViewItemScreen")}
+            title="cat1"
+          ></Button>
+        </View>
+        <View>
+          <Text>sayed</Text>
+        </View>
+        <View style={styles.catButton}>
+          <Button
+            onPress={() => navigation.navigate("MyListsScreen")}
+            title="cat2"
+          ></Button>
         <View style={styles.buttonsContainer}>
 
             <View style={styles.catButton}>
@@ -17,7 +31,6 @@ const LoginScreen = ({ navigation }) => {
             <View style={styles.catButton}>
               <Button onPress={() => navigation.navigate("MyListsScreen")} title="My Lists"></Button>
             </View>
-
         </View>
 
         <View style={styles.buttonsContainer}>

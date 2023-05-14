@@ -7,6 +7,7 @@ import LoginScreen from "./Pages/LoginScreen/LoginScreen"
 import SignUpScreen from "./Pages/SignUpScreen/SignUpScreen"
 import HomeScreen from "./Pages/HomeScreen/HomeScreen";
 import MyListsScreen from "./Pages/MyListsScreen/MyListsScreen";
+import ViewItemScreen from "./Pages/ViewItemScreen/ViewItemScreen";
 
 import ItemsScreen from "./Pages/ItemsScreen/ItemsScreen";
 
@@ -23,6 +24,7 @@ export default function App() {
         <Stack.Screen name="ItemsScreen" component={ItemsScreen} />
 
         <Stack.Screen name="MyListsScreen" component={MyListsScreen} />
+        <Stack.Screen name="ViewItemScreen" component={ViewItemScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
