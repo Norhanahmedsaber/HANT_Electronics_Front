@@ -7,6 +7,7 @@ const MyListsScreen=({navigation})=>{
         { id: 2, name: 'list 2' },
     ])    
       return (
+
       <View>
       <FlatList
       data={list}
@@ -22,6 +23,7 @@ const MyListsScreen=({navigation})=>{
       }}
   />
         <Button title="add" style={styles.ButtonContainer}></Button>
+
         </View>
         );
     };

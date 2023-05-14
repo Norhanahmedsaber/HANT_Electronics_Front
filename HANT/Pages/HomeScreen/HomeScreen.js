@@ -22,11 +22,30 @@ const LoginScreen = ({ navigation }) => {
             onPress={() => navigation.navigate("MyListsScreen")}
             title="cat2"
           ></Button>
+        <View style={styles.buttonsContainer}>
+
+            <View style={styles.catButton}>
+              <Button onPress={() => navigation.navigate("ItemsScreen")} title="Items"></Button>
+            </View>
+
+            <View style={styles.catButton}>
+              <Button onPress={() => navigation.navigate("MyListsScreen")} title="My Lists"></Button>
+            </View>
         </View>
-        <View>
-          <Text>sayed</Text>
+
+        <View style={styles.buttonsContainer}>
+
+            <View style={styles.catButton}>
+              <Button onPress={() => navigation.navigate("ItemsScreen")} title="cat3"></Button>
+            </View>
+
+            <View style={styles.catButton}>
+              <Button onPress={() => navigation.navigate("MyListsScreen")} title="cat4"></Button>
+            </View>
+
         </View>
-      </View>
+
+
     </View>
   );
 };
@@ -35,29 +54,27 @@ export default LoginScreen;
 const styles = StyleSheet.create({
   container: {
     flexDirection: "column",
-    marginLeft: 30,
+    marginLeft: 20,
     marginTop: 30,
     borderWidth: 2,
-    maxWidth: "80%",
+    maxWidth: 350,
   },
 
   catButton: {
     borderWidth: 2,
     borderColor: "black",
-    marginLeft: 10,
     color: "black",
     backgroundColor: "yellow",
     borderRadius: 6,
     height: 150,
-    width: "30%",
+    width: 100,
     justifyContent: "center",
-    marginTop: 40,
-    marginBottom: 40,
-    marginLeft: 40,
+    marginTop: 20,
+    marginBottom: 20,
+    marginLeft: 10,
   },
   buttonsContainer: {
     flexDirection: "row",
     justifyContent: "center",
-    marginTop: 30,
   },
 });
