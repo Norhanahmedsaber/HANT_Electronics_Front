@@ -11,7 +11,7 @@
     "git-h": "git add . && git commit -m 'hussien' && git push origin hussien",
     "git-t":"git add . && git commit -m 'toka' && git push origin toka",
     "git-a": "git add . && git commit -m 'anas' && git push origin master",
-    "git-n": "git add . && git commit -m 'anas' && git push origin noor"
+    "git-n": "git add . && git commit -m 'noor' && git push origin noor"
   },
   "dependencies": {
     "expo": "~48.0.15",
