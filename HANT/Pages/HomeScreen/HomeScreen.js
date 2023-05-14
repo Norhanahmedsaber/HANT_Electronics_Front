@@ -10,7 +10,7 @@ const LoginScreen = ({ navigation }) => {
         </View>
         <View style={styles.catButton}>
           <Button
-            onPress={() => navigation.navigate("ItemsScreen")}
+            onPress={() => navigation.navigate("ViewItemScreen")}
             title="cat1"
           ></Button>
         </View>
