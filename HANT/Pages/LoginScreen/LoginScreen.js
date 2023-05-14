@@ -1,7 +1,7 @@
 import React from "react";
 import { View, Text,Button,TextInput, StyleSheet } from "react-native";
 
-const LoginScreen = () => {
+const LoginScreen = ({ navigation }) => {
     return (
         <View style={styles.PageContainer}>
              <TextInput style={styles.textInputContainer} placeholder="Username" be/>
@@ -14,7 +14,7 @@ const LoginScreen = () => {
         </View>
             <View style={styles.SignUpContainer}>
                 <Text>I donot have an account </Text>
-                <Text> Sign Up</Text>
+                <Text onPress={() => navigation.navigate("Sign Up")}> Sign Up</Text>
             </View>
          </View>
     )
