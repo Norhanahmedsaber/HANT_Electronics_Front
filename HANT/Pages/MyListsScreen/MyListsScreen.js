@@ -14,16 +14,14 @@ const MyListsScreen=({navigation})=>{
       );
     
       return (
-        <SafeAreaView style={styles.container}>
-        <FlatList
-          data={data}
-          renderList={renderList}
-          keyExtractor={list => list.id.toString()}
-        />
-        <SafeAreaView/>
+        <View>
+          <Text>
+            Noorah
+          </Text>
+        </View>
         );
     };
-export default MylistsScreen;
+export default MyListsScreen;
 const styles = StyleSheet.create({
  pageContainer:{
     flexDirection:'column',
