@@ -5,17 +5,26 @@ const LoginScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <View styles={styles.buttonsContainer}>
-        <View styles={styles.catContainer}>
+        <View>
+          <Text>sayed</Text>
+        </View>
+        <View style={styles.catButton}>
           <Button
-            title="cat1"
             onPress={() => navigation.navigate("ItemsScreen")}
+            title="cat1"
           ></Button>
         </View>
         <View>
+          <Text>sayed</Text>
+        </View>
+        <View style={styles.catButton}>
           <Button
-            title="cat2"
             onPress={() => navigation.navigate("MyListsScreen")}
+            title="cat2"
           ></Button>
+        </View>
+        <View>
+          <Text>sayed</Text>
         </View>
       </View>
     </View>
@@ -26,47 +35,25 @@ export default LoginScreen;
 const styles = StyleSheet.create({
   container: {
     flexDirection: "column",
+    marginLeft: 30,
+    marginTop: 30,
+    borderWidth: 2,
+    maxWidth: "80%",
   },
-  PageContainer: {
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "center",
-    paddingTop: 200,
-    paddingBottom: 5,
-    width: "100%",
-  },
-  SignInContainer: {
-    flexDirection: "column",
-    padding: 10,
-    width: "100%",
-  },
-  textInputContainer: {
-    borderColor: "grey",
-    borderRadius: 6,
-    borderWidth: 1,
-    width: "90%",
-    margin: 5,
-  },
-  SignUpContainer: {
-    flexDirection: "row",
-    paddingTop: 5,
-    paddingRight: 50,
-    width: "100%",
-  },
-  GuestContainer: {
-    padding: 10,
-    width: "100%",
-  },
+
   catButton: {
-    borderWidth: 1,
-    borderColor: "#cccccc",
+    borderWidth: 2,
+    borderColor: "black",
     marginLeft: 10,
-    color: "white",
+    color: "black",
     backgroundColor: "yellow",
     borderRadius: 6,
-    height: 40,
-    width: 100,
+    height: 150,
+    width: "30%",
     justifyContent: "center",
+    marginTop: 40,
+    marginBottom: 40,
+    marginLeft: 40,
   },
   buttonsContainer: {
     flexDirection: "row",
