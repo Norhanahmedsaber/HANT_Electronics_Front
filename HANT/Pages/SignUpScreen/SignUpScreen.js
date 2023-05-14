@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -9,7 +9,49 @@ import {
   FlatList,
 } from "react-native";
 
-const SignUpScreen = () => {
+const SignUpScreen = ({ navigation }) => {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("");
+  
+  const usernameChanged = (value) => {
+    setUsername(value)
+  }
+  const passwordChanged = (value) => {
+    setPassword(value)
+  }
+  const emailChanged = (value) => {
+    setEmail(value)
+  }
+  const valid = () => {
+    return true;
+  }
+  const signUpClicked = () => {
+    if(valid()) {
+      fetch("http://192.168.1.137:3000/signup", {
+        method: "POST",
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          username: username,
+          email: email,
+          password: password
+        })
+        
+      }).then((response) => {
+        return response.json()
+      })
+      .then((res) => {
+        if(res.Data === "Done") {
+         navigation.navigate("HomeScreen")
+        }else {
+          alert("Error")
+        }
+      }).catch((error) => {
+        console.log(error);
+    })
+    }
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.pageName}>
@@ -24,6 +66,7 @@ const SignUpScreen = () => {
             <TextInput
               style={styles.textInput}
               placeholder="Enter Your Mail"
+              onChangeText={emailChanged}
             ></TextInput>
           </View>
         </View>
@@ -36,6 +79,7 @@ const SignUpScreen = () => {
             <TextInput
               style={styles.textInput}
               placeholder="Enter User Name"
+              onChangeText={usernameChanged}
             ></TextInput>
           </View>
         </View>
@@ -48,6 +92,7 @@ const SignUpScreen = () => {
             <TextInput
               style={styles.textInput}
               placeholder="Enter Your Password"
+              onChangeText={passwordChanged}
             ></TextInput>
           </View>
         </View>
@@ -57,7 +102,7 @@ const SignUpScreen = () => {
             <Button title="Cancel"></Button>
           </View>
           <View style={styles.signUpButton}>
-            <Button title="Sign Up"></Button>
+            <Button onPress={signUpClicked} title="Sign Up"></Button>
           </View>
         </View>
       </View>
