@@ -4,12 +4,12 @@
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
     "start": "expo start",
+    "tunnel": "expo start --tunnel",
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-
     "git-h": "git add . && git commit -m 'hussien' && git push origin hussien",
-    "git-t":"git add . && git commit -m 'toka' && git push origin toka",
+    "git-t": "git add . && git commit -m 'toka' && git push origin toka",
     "git-a": "git add . && git commit -m 'anas' && git push origin master",
     "git-n": "git add . && git commit -m 'noor' && git push origin noor"
   },
