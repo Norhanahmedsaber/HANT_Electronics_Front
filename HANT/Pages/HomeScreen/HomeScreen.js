@@ -8,8 +8,8 @@ const HomeScreen = ({ navigation }) => {
         <View style={styles.buttonsContainer}>
           <View style={styles.catButton}>
             <Button
-              onPress={() => navigation.navigate("ViewItemScreen")}
-              title="Items"
+              onPress={() => navigation.navigate("CategoriesScreen")}
+              title="Categories"
             ></Button>
           </View>
 
@@ -24,14 +24,14 @@ const HomeScreen = ({ navigation }) => {
           <View style={styles.catButton}>
             <Button
               onPress={() => navigation.navigate("ComponentsScreen")}
-              title="cat3"
+              title="Components"
             ></Button>
           </View>
 
           <View style={styles.catButton}>
             <Button
-              onPress={() => navigation.navigate("MyListsScreen")}
-              title="cat4"
+              onPress={() => navigation.navigate("StoresScreen")}
+              title="Stores"
             ></Button>
           </View>
         </View>
