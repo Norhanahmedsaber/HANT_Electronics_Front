@@ -1,17 +1,14 @@
-
-
 import * as React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import LoginScreen from "./Pages/LoginScreen/LoginScreen"
-import SignUpScreen from "./Pages/SignUpScreen/SignUpScreen"
+import LoginScreen from "./Pages/LoginScreen/LoginScreen";
+import SignUpScreen from "./Pages/SignUpScreen/SignUpScreen";
 import HomeScreen from "./Pages/HomeScreen/HomeScreen";
 import MyListsScreen from "./Pages/MyListsScreen/MyListsScreen";
 import ViewItemScreen from "./Pages/ViewItemScreen/ViewItemScreen";
 import ComponentsScreen from "./Pages/ComponentsScreen/ComponentsScreen";
-import ItemsScreen from "./Pages/ItemsScreen/ItemsScreen";
 
-const Stack = createNativeStackNavigator()
+const Stack = createNativeStackNavigator();
 
 export default function App() {
   return (

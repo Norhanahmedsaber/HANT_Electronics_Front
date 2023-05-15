@@ -6,27 +6,37 @@ const HomeScreen = ({ navigation }) => {
     <View style={styles.container}>
       <View styles={styles.buttonsContainer}>
         <View style={styles.buttonsContainer}>
+          <View style={styles.catButton}>
+            <Button
+              onPress={() => navigation.navigate("ViewItemScreen")}
+              title="Items"
+            ></Button>
+          </View>
 
-              <View style={styles.catButton}>
-                <Button onPress={() => navigation.navigate("ItemsScreen")} title="Items"></Button>
-              </View>
-
-              <View style={styles.catButton}>
-                <Button onPress={() => navigation.navigate("MyListsScreen")} title="My Lists"></Button>
-              </View>
+          <View style={styles.catButton}>
+            <Button
+              onPress={() => navigation.navigate("MyListsScreen")}
+              title="My Lists"
+            ></Button>
+          </View>
         </View>
         <View style={styles.buttonsContainer}>
+          <View style={styles.catButton}>
+            <Button
+              onPress={() => navigation.navigate("ComponentsScreen")}
+              title="cat3"
+            ></Button>
+          </View>
 
-              <View style={styles.catButton}>
-                <Button onPress={() => navigation.navigate("ComponentsScreen")} title="cat3"></Button>
-              </View>
-
-              <View style={styles.catButton}>
-                <Button onPress={() => navigation.navigate("MyListsScreen")} title="cat4"></Button>
-              </View>
+          <View style={styles.catButton}>
+            <Button
+              onPress={() => navigation.navigate("MyListsScreen")}
+              title="cat4"
+            ></Button>
+          </View>
         </View>
       </View>
-      </View>
+    </View>
   );
 };
 
