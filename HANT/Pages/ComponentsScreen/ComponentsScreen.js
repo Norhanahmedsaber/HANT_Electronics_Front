@@ -1,16 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, FlatList } from "react-native";
 
-const ItemsScreen = ({ navigation }) => {
-    const [items, setItems] = useState([{
-        text: "anas"
-    },{
-        text: "s7s"
-    },{
-        text: "nora"
-    }])
+const ComponentsScreen = ({ navigation }) => {
+    const [items, setItems] = useState([])
     useEffect(() => {
-        
+        fetch("http://192.168.1.137:3000/cats").then((res) => res.json())
+        .then((response) => {
+          setItems(response)
+        })
     }, [])
     return (
         <View style={styles.appContainer}>
@@ -19,7 +16,7 @@ const ItemsScreen = ({ navigation }) => {
                 renderItem = {(itemData) => {
                     return (
                     <View style={styles.goalItem}>
-                        <Text style={styles.goalText}>{itemData.item.text}</Text>
+                        <Text style={styles.goalText}>{itemData.item.name}</Text>
                     </View>
                     );
                 }}
@@ -30,7 +27,7 @@ const ItemsScreen = ({ navigation }) => {
         </View>
     )
 }
-export default ItemsScreen
+export default ComponentsScreen
 const styles = StyleSheet.create( {
     appContainer: {
         flex: 1,

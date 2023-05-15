@@ -1,56 +1,36 @@
 import React from "react";
 import { View, Text, Button, TextInput, StyleSheet } from "react-native";
 
-const LoginScreen = ({ navigation }) => {
+const HomeScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <View styles={styles.buttonsContainer}>
-        <View>
-          <Text>sayed</Text>
-        </View>
-        <View style={styles.catButton}>
-          <Button
-            onPress={() => navigation.navigate("ViewItemScreen")}
-            title="cat1"
-          ></Button>
-        </View>
-        <View>
-          <Text>sayed</Text>
-        </View>
-        <View style={styles.catButton}>
-          <Button
-            onPress={() => navigation.navigate("MyListsScreen")}
-            title="cat2"
-          ></Button>
         <View style={styles.buttonsContainer}>
 
-            <View style={styles.catButton}>
-              <Button onPress={() => navigation.navigate("ItemsScreen")} title="Items"></Button>
-            </View>
+              <View style={styles.catButton}>
+                <Button onPress={() => navigation.navigate("ItemsScreen")} title="Items"></Button>
+              </View>
 
-            <View style={styles.catButton}>
-              <Button onPress={() => navigation.navigate("MyListsScreen")} title="My Lists"></Button>
-            </View>
+              <View style={styles.catButton}>
+                <Button onPress={() => navigation.navigate("MyListsScreen")} title="My Lists"></Button>
+              </View>
         </View>
-
         <View style={styles.buttonsContainer}>
 
-            <View style={styles.catButton}>
-              <Button onPress={() => navigation.navigate("ItemsScreen")} title="cat3"></Button>
-            </View>
+              <View style={styles.catButton}>
+                <Button onPress={() => navigation.navigate("ComponentsScreen")} title="cat3"></Button>
+              </View>
 
-            <View style={styles.catButton}>
-              <Button onPress={() => navigation.navigate("MyListsScreen")} title="cat4"></Button>
-            </View>
-
+              <View style={styles.catButton}>
+                <Button onPress={() => navigation.navigate("MyListsScreen")} title="cat4"></Button>
+              </View>
         </View>
-
-
-    </View>
+      </View>
+      </View>
   );
 };
 
-export default LoginScreen;
+export default HomeScreen;
 const styles = StyleSheet.create({
   container: {
     flexDirection: "column",

@@ -8,7 +8,7 @@ import SignUpScreen from "./Pages/SignUpScreen/SignUpScreen"
 import HomeScreen from "./Pages/HomeScreen/HomeScreen";
 import MyListsScreen from "./Pages/MyListsScreen/MyListsScreen";
 import ViewItemScreen from "./Pages/ViewItemScreen/ViewItemScreen";
-
+import ComponentsScreen from "./Pages/ComponentsScreen/ComponentsScreen";
 import ItemsScreen from "./Pages/ItemsScreen/ItemsScreen";
 
 const Stack = createNativeStackNavigator()
@@ -21,7 +21,7 @@ export default function App() {
         <Stack.Screen name="Sign Up" component={SignUpScreen} />
         <Stack.Screen name="HomeScreen" component={HomeScreen} />
 
-        <Stack.Screen name="ItemsScreen" component={ItemsScreen} />
+        <Stack.Screen name="ComponentsScreen" component={ComponentsScreen} />
 
         <Stack.Screen name="MyListsScreen" component={MyListsScreen} />
         <Stack.Screen name="ViewItemScreen" component={ViewItemScreen} />
