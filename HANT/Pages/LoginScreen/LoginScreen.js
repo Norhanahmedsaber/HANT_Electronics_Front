@@ -11,12 +11,13 @@ const LoginScreen = ({ navigation }) => {
     return SetPasword(vaLue);
   }
   function login() {
-    fetch("http://192.168.1.141:3000/Signin", {
+    fetch("http://192.168.1.5:3000/Signin", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         username: UserName,
         password: Password,
+        roleid: 1
       }),
     })
       .then((res) => {
@@ -24,10 +25,10 @@ const LoginScreen = ({ navigation }) => {
       })
       .then((response) => {
         console.log(response);
-        if (response.message === "Logged In") {
+        if (response.user) {
           navigation.navigate("HomeScreen");
         } else {
-          alert("error");
+          alert(response.message);
         }
       })
       .catch((error) => {

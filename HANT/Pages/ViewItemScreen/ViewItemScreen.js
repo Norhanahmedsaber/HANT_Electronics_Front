@@ -8,7 +8,7 @@ const ViewItemScreen = ({ navigation }) => {
   }
 
   useEffect(() => {
-    fetch("http://192.168.1.141:3000/items/1")
+    fetch("http://192.168.1.5:3000/items/1")
       .then((res) => res.json())
       .then((result) => {
         setItem(result);
