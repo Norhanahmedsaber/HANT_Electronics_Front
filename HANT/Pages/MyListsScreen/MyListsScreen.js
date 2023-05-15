@@ -1,11 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text,Button,TextInput, StyleSheet,FlatList } from "react-native";
 
 const MyListsScreen=({navigation})=>{
-    const [list,SetList]=useState([
-        { id: 1, name: 'list 1' },
-        { id: 2, name: 'list 2' },
-    ])    
+    const [list,SetList]=useState([])  
+    useEffect(() => {
+        fetch("http://192.168.1.138:3000/lists").then((res) => res.json())
+        .then((response) => {
+          SetList(response)
+        })
+    }, [])
       return (
       <View>
       <FlatList
@@ -18,7 +21,7 @@ const MyListsScreen=({navigation})=>{
           );
       }}
       keyExtractor={(item, index) => {
-          return item.id;
+          return index;
       }}
   />
         <Button title="add" style={styles.ButtonContainer}></Button>
