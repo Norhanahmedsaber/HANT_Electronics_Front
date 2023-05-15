@@ -2,30 +2,32 @@ import React, { useState } from "react";
 import { View, Text, Button, TextInput, StyleSheet } from "react-native";
 
 const LoginScreen = ({ navigation }) => {
-
-    const [UserName,SetUserName]=useState('')
-    const [Password,SetPasword]=useState('')
-     function UserNameHandler(vaLue){
-        return SetUserName(vaLue)
-     }; 
-     function PasswordHandler(vaLue){ 
-        return SetPasword(vaLue)
-     }; 
-     function login(){
-        fetch("http://192.168.1.137:3000/SignIn",{
-            method: "POST",
-            headers: {'Content-Type': 'application/json'}, 
-            body:JSON.stringify({
-                username: UserName,
-                password: Password
-           }),
-       })
-        .then( (res) =>{
-            return res.json();
-     }).then(response => {
-        console.log(response)
-        if(response.message==="Logged In"){
-            navigation.navigate("HomeScreen")
+  const [UserName, SetUserName] = useState("");
+  const [Password, SetPasword] = useState("");
+  function UserNameHandler(vaLue) {
+    return SetUserName(vaLue);
+  }
+  function PasswordHandler(vaLue) {
+    return SetPasword(vaLue);
+  }
+  function login() {
+    fetch("http://192.168.1.141:3000/Signin", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        username: UserName,
+        password: Password,
+      }),
+    })
+      .then((res) => {
+        return res.json();
+      })
+      .then((response) => {
+        console.log(response);
+        if (response.message === "Logged In") {
+          navigation.navigate("HomeScreen");
+        } else {
+          alert("error");
         }
       })
       .catch((error) => {

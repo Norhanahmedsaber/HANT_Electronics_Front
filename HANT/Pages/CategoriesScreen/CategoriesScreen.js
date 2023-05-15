@@ -8,23 +8,25 @@ import {
   FlatList,
 } from "react-native";
 
-const MyListsScreen = ({ navigation }) => {
-  const [list, SetList] = useState([]);
+const CategoriesScreen = ({ navigation }) => {
+  const [Categories, SetCategories] = useState([]);
   useEffect(() => {
-    fetch("http://192.168.1.141:3000/lists")
+    fetch("http://192.168.1.141:3000/categories")
       .then((res) => res.json())
       .then((response) => {
-        SetList(response);
+        SetCategories(response);
       });
   }, []);
   return (
     <View>
       <FlatList
-        data={list}
-        renderItem={(ListData) => {
+        data={Categories}
+        renderItem={(CategoriesData) => {
           return (
             <View style={styles.listContainer}>
-              <Text style={styles.listTextContainer}>{ListData.item.name}</Text>
+              <Text style={styles.listTextContainer}>
+                {CategoriesData.item.name}
+              </Text>
             </View>
           );
         }}
@@ -32,11 +34,10 @@ const MyListsScreen = ({ navigation }) => {
           return index;
         }}
       />
-      <Button title="add" style={styles.ButtonContainer}></Button>
     </View>
   );
 };
-export default MyListsScreen;
+export default CategoriesScreen;
 const styles = StyleSheet.create({
   pageContainer: {
     flexDirection: "column",
