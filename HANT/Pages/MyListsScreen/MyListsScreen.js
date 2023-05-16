@@ -28,7 +28,8 @@ const MyListsScreen = ({ navigation, route }) => {
   }, []);
   const pressedList=(ListId)=>{
     navigation.navigate("ListScreen",{
-      id:ListId
+      id:ListId,
+      token: route.params.token
     })
   } 
   return (
@@ -37,7 +38,7 @@ const MyListsScreen = ({ navigation, route }) => {
         data={list}
         renderItem={(ListData) => {
           return (
-            <Pressable on pressRetentionOffset={()=>{
+            <Pressable onPress ={()=>{
               pressedList(ListData.item.id)
             }}>
             <View style={styles.listContainer}>

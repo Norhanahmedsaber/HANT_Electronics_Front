@@ -9,6 +9,7 @@ import ViewItemScreen from "./Pages/ViewItemScreen/ViewItemScreen";
 import ComponentsScreen from "./Pages/ComponentsScreen/ComponentsScreen";
 import StoresScreen from "./Pages/StoresScreen/StoresScreen";
 import CategoriesScreen from "./Pages/CategoriesScreen/CategoriesScreen";
+import ListScreen from "./Pages/ListScreen/ListScreen"
 const Stack = createNativeStackNavigator();
 
 export default function App() {
@@ -23,6 +24,7 @@ export default function App() {
         <Stack.Screen name="StoresScreen" component={StoresScreen} />
         <Stack.Screen name="MyListsScreen" component={MyListsScreen} />
         <Stack.Screen name="ViewItemScreen" component={ViewItemScreen} />
+        <Stack.Screen name="ListScreen" component={ListScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

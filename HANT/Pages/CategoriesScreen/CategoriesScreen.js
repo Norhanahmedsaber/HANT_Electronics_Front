@@ -9,7 +9,7 @@ import {
   Pressable,
 } from "react-native";
 
-const CategoriesScreen = ({ navigation }) => {
+const CategoriesScreen = ({ navigation, route }) => {
   const [Categories, SetCategories] = useState([]);
   useEffect(() => {
     fetch("http://192.168.1.137:3000/categories")
@@ -20,7 +20,8 @@ const CategoriesScreen = ({ navigation }) => {
   }, []);
   const categoryPressed = (categoryId) => {
     navigation.navigate("ComponentsScreen", {
-      id: categoryId
+      id: categoryId,
+      mode: route.params.mode
     })
   }
   return (

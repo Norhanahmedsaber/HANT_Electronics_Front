@@ -4,7 +4,7 @@ import { View, Text, StyleSheet, FlatList } from "react-native";
 const ListScreen = ({route, navigation}) => {
   const [items, setItems] = useState([]);
   useEffect(() => {
-    fetch("http://192.168.1.138:3000/list/:id" + route.params.id)
+    fetch("http://192.168.1.137:3000/item/" + route.params.id)
       .then((res) => res.json())
       .then((response) => {
         setItems(response);
@@ -18,6 +18,7 @@ const ListScreen = ({route, navigation}) => {
           return (
             <View style={styles.goalItem}>
               <Text style={styles.goalText}>{itemData.item.name}</Text>
+              <Text style={styles.goalText}>{itemData.item.quantity}</Text>
             </View>
           );
         }}
