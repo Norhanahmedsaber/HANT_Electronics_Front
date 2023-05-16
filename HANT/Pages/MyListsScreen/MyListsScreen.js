@@ -6,30 +6,40 @@ import {
   TextInput,
   StyleSheet,
   FlatList,
+  Pressable,
 } from "react-native";
 
 const MyListsScreen = ({ navigation }) => {
   const [list, SetList] = useState([]);
   useEffect(() => {
-    fetch("http://192.168.1.137:3000/lists")
+    fetch("http://192.168.1.138:3000/lists")
       .then((res) => res.json())
       .then((response) => {
         SetList(response);
       });
   }, []);
+  const pressedList=(ListId)=>{
+    navigation.navigate("ListScreen",{
+      id:ListId
+    })
+  } 
   return (
     <View>
       <FlatList
         data={list}
         renderItem={(ListData) => {
           return (
+            <Pressable on pressRetentionOffset={()=>{
+              pressedList(ListData.item.id)
+            }}>
             <View style={styles.listContainer}>
               <Text style={styles.listTextContainer}>{ListData.item.name}</Text>
             </View>
+            </Pressable>
           );
         }}
         keyExtractor={(item, index) => {
-          return index;
+          return item.id;
         }}
       />
       <Button title="add" style={styles.ButtonContainer}></Button>
