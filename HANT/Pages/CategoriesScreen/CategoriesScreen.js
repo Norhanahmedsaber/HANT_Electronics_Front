@@ -6,32 +6,42 @@ import {
   TextInput,
   StyleSheet,
   FlatList,
+  Pressable,
 } from "react-native";
 
 const CategoriesScreen = ({ navigation }) => {
   const [Categories, SetCategories] = useState([]);
   useEffect(() => {
-    fetch("http://192.168.1.141:3000/categories")
+    fetch("http://192.168.1.137:3000/categories")
       .then((res) => res.json())
       .then((response) => {
         SetCategories(response);
       });
   }, []);
+  const categoryPressed = (categoryId) => {
+    navigation.navigate("ComponentsScreen", {
+      id: categoryId
+    })
+  }
   return (
     <View>
       <FlatList
         data={Categories}
         renderItem={(CategoriesData) => {
           return (
-            <View style={styles.listContainer}>
+            <Pressable onPress={()=> {
+              categoryPressed(CategoriesData.item.id)
+            }}>
+              <View style={styles.listContainer}>
               <Text style={styles.listTextContainer}>
                 {CategoriesData.item.name}
               </Text>
             </View>
+            </Pressable>
           );
         }}
         keyExtractor={(item, index) => {
-          return index;
+          return item.id;
         }}
       />
     </View>

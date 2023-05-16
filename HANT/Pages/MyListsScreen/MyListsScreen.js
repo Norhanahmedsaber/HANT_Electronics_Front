@@ -11,7 +11,7 @@ import {
 const MyListsScreen = ({ navigation }) => {
   const [list, SetList] = useState([]);
   useEffect(() => {
-    fetch("http://192.168.1.5:3000/lists")
+    fetch("http://192.168.1.137:3000/lists")
       .then((res) => res.json())
       .then((response) => {
         SetList(response);

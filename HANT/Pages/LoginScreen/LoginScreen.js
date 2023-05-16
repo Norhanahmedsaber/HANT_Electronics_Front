@@ -11,7 +11,7 @@ const LoginScreen = ({ navigation }) => {
     return SetPasword(vaLue);
   }
   function login() {
-    fetch("http://192.168.1.5:3000/Signin", {
+    fetch("http://192.168.1.137:3000/Signin", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -25,7 +25,7 @@ const LoginScreen = ({ navigation }) => {
       })
       .then((response) => {
         console.log(response);
-        if (response.user) {
+        if (response.username) {
           navigation.navigate("HomeScreen");
         } else {
           alert(response.message);
