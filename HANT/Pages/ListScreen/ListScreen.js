@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, FlatList } from "react-native";
+import { View, Text, StyleSheet, FlatList , Button} from "react-native";
 
 const ListScreen = ({ route, navigation }) => {
   const [items, setItems] = useState([]);
@@ -11,6 +11,20 @@ const ListScreen = ({ route, navigation }) => {
         setItems(response);
       });
   }, []);
+
+  function deleteItem(id) {
+    console.log(id)
+    fetch("http://192.168.1.137:3000/item/" + id , {method : 'DELETE'})
+      .then((response) => {
+          fetch("http://192.168.1.137:3000/item/" + route.params.id)
+
+          .then((res) => res.json())
+          .then((result) => {
+          setItems(result);
+        });
+      });
+  }
+
   return (
     <View style={styles.appContainer}>
       <FlatList
@@ -18,9 +32,21 @@ const ListScreen = ({ route, navigation }) => {
         renderItem={(itemData) => {
           return (
             <View style={styles.goalItem}>
+              <View>
               <Text style={styles.goalText}>{itemData.item.name}</Text>
               <Text style={styles.goalText}>{itemData.item.quantity}</Text>
+              </View>
+              <View>
+                
+                <Button title="Delete" onPress={()=>{
+                  deleteItem(itemData.item.id)
+                }}></Button>
+              </View>
+
+
             </View>
+            
+
           );
         }}
         keyExtractor={(item, index) => {
