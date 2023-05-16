@@ -13,8 +13,10 @@ import {
 const MyListsScreen = ({ navigation, route }) => {
   const [list, SetList] = useState([]);
   const [token, setToken] = useState("");
+  const [deleted, setDeleted] = useState(false)
+  const [fav,setToFav]=useState(false)
   useEffect(() => {
-    fetch("http://192.168.1.137:3000/list", {
+    fetch("http://192.168.1.138:3000/list", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -26,14 +28,95 @@ const MyListsScreen = ({ navigation, route }) => {
         SetList(response);
       });
   }, []);
-
+  useEffect(() => {
+    fetch("http://192.168.1.138:3000/list", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + route.params.token,
+      },
+    })
+      .then((res) => res.json())
+      .then((response) => {
+        SetList(response);
+        setDeleted(false)
+      });
+  }, [deleted]);
+  useEffect(() => {
+    fetch("http://192.168.1.138:3000/list", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + route.params.token,
+      },
+    })
+      .then((res) => res.json())
+      .then((response) => {
+        SetList(response);
+        setToFav(false)
+      });
+  }, [fav]);
   const pressedList=(ListId)=>{
+    console.log('aaaas')
+
     navigation.navigate("ListScreen",{
       id:ListId,
       token: route.params.token
     })
   } 
-
+ const addList=()=>{
+  fetch("http://192.168.1.138:3000/list",{ 
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + route.params.token,
+    },})
+  .then((res)=>res.json())
+  .then((response)=>{
+    const id = response.id;
+    navigation.navigate("ListScreen",{
+      id:id,
+      token: route.params.token
+    })
+  })
+ }
+ const deleteList=(id)=>{
+  fetch("http://192.168.1.138:3000/list/user/" + id,{ 
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + route.params.token,
+    },})  .then((res)=>res.json())
+    .then((response)=>{
+      if(response.message === "deleted") {
+        setDeleted(true);
+      }
+    })
+ }
+const setfav=(id)=>{
+  fetch("http://192.168.1.138:3000/list/setfav/" + id,{ 
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + route.params.token,
+    },})  .then((res)=>res.json())
+    .then((response)=>{
+      if(response.message === "Added to fav") {
+        setToFav(true);
+      }
+    })
+}
+const getFavs=()=>{
+  fetch("http://192.168.1.138:3000/list/get/favs",{ 
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + route.params.token,
+    },})  .then((res)=>res.json())
+    .then((response)=>{
+      SetList(response);
+    })
+}
 
   return (
     <View>
@@ -41,22 +124,30 @@ const MyListsScreen = ({ navigation, route }) => {
         data={list}
         renderItem={(ListData) => {
           return (
-
-            <Pressable onPress ={()=>{
-              pressedList(ListData.item.id)
-            }}>
-            <View style={styles.listContainer}>
-              <Text style={styles.listTextContainer}>{ListData.item.name}</Text>
+            <View >
+              <Pressable onPress ={()=>{
+                pressedList(ListData.item.id)
+              }}>
+              </Pressable>
+              <View style={styles.listContainer} >
+                <Text style={styles.listTextContainer}>{ListData.item.name}</Text>
+                <Button title="D" onPress={()=> {deleteList(ListData.item.id)}}></Button>
+                <Button title="E" onPress={()=> {pressedList(ListData.item.id)}}></Button>
+                <Button title="F" onPress={()=> {setfav(ListData.item.id)}}></Button>
+              </View>
             </View>
-
-            </Pressable>
           );
         }}
         keyExtractor={(item, index) => {
           return item.id;
         }}
       />
-      <Button title="add" style={styles.ButtonContainer}></Button>
+      <View style={styles.AddButtonContainer}>
+      <Button title="add" onPress={addList}></Button>
+      </View>
+      <View style={styles.AddButtonContainer}>
+      <Button title="favs" onPress={getFavs}></Button>
+      </View>
     </View>
   );
 };
@@ -72,9 +163,11 @@ const styles = StyleSheet.create({
   },
   AddButtonContainer: {
     padding: 10,
+    margin:5,
     width: "100%",
   },
   ListsContainer: {
+    flexDirection: "row",
     padding: 10,
     borderBottomWidth: 1,
   },
@@ -83,6 +176,7 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   listContainer: {
+    flexDirection:'row',
     margin: 8,
     paddinf: 8,
     borderRadius: 6,
