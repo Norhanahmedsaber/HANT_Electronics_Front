@@ -14,7 +14,7 @@ const MyListsScreen = ({ navigation, route }) => {
   const [list, SetList] = useState([]);
   const [token, setToken] = useState("");
   useEffect(() => {
-    fetch("http://192.168.1.141:3000/list", {
+    fetch("http://192.168.1.137:3000/list", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

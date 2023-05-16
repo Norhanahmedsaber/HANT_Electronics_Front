@@ -5,7 +5,7 @@ const ComponentsScreen = ({ route, navigation }) => {
   const [items, setItems] = useState([]);
 
   useEffect(() => {
-    fetch("http://192.168.1.141:3000/component/cat/" + route.params.id)
+    fetch("http://192.168.1.137:3000/component/cat/" + route.params.id)
       .then((res) => res.json())
       .then((response) => {
         setItems(response);

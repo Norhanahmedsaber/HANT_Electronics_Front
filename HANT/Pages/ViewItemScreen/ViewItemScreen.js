@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, Button, TextInput, StyleSheet } from "react-native";
 
-const ViewItemScreen = ({ navigation }) => {
+const ViewItemScreen = ({ navigation, route }) => {
   const [item, setItem] = useState({});
   function itemHandler(item) {
     return setItem(item);
   }
 
   useEffect(() => {
-    fetch("http://192.168.1.141:3000/items/1")
+    fetch("http://192.168.1.137:3000/component/" + route.params.id)
       .then((res) => res.json())
       .then((result) => {
         setItem(result);
