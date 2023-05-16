@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, FlatList , Button} from "react-native";
+import config from "../../Config/config";
 
 const ListScreen = ({ route, navigation }) => {
   const [items, setItems] = useState([]);
   useEffect(() => {
-    fetch("http://192.168.1.137:3000/item/" + route.params.id)
+    fetch(config.BASE_URL + "/item/" + route.params.id)
 
       .then((res) => res.json())
       .then((response) => {
@@ -14,9 +15,9 @@ const ListScreen = ({ route, navigation }) => {
 
   function deleteItem(id) {
     console.log(id)
-    fetch("http://192.168.1.137:3000/item/" + id , {method : 'DELETE'})
+    fetch(config.BASE_URL + "/item/" + id , {method : 'DELETE'})
       .then((response) => {
-          fetch("http://192.168.1.137:3000/item/" + route.params.id)
+          fetch(config.BASE_URL + "/item/" + route.params.id)
 
           .then((res) => res.json())
           .then((result) => {

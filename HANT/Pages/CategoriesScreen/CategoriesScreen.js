@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import config from "../../Config/config";
+
 import {
   View,
   Text,
@@ -15,7 +17,7 @@ const CategoriesScreen = ({ navigation, route }) => {
   const [search, setSearch] = useState("");
   const [clicked, setClicked] = useState(false)
   useEffect(() => {
-    fetch("http://192.168.1.137:3000/categories")
+    fetch(config.BASE_URL + "/categories")
       .then((res) => res.json())
       .then((response) => {
         SetCategories(response);

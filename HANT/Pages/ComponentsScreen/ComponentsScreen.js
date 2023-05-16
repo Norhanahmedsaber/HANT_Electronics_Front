@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, FlatList, Pressable, TextInput } from "react-native";
+import config from "../../Config/config";
 
 const ComponentsScreen = ({ route, navigation }) => {
   const [items, setItems] = useState([]);
@@ -7,20 +8,20 @@ const ComponentsScreen = ({ route, navigation }) => {
 
   useEffect(() => {
     if(route.params.from == "category") {
-      fetch("http://192.168.1.137:3000/component/cat/" + route.params.id)
+      fetch(config.BASE_URL + "/component/cat/" + route.params.id)
       .then((res) => res.json())
       .then((response) => {
         setItems(response);
       });
     }else if(route.params.from == "search") {
       if(route.params.search.length > 0){
-        fetch("http://192.168.1.137:3000/component/search/" + route.params.search)
+        fetch(config.BASE_URL + "/component/search/" + route.params.search)
         .then((res) => res.json())
         .then((response) => {
           setItems(response);
       });
       }else {
-        fetch("http://192.168.1.137:3000/component/")
+        fetch(config.BASE_URL + "/component/")
         .then((res) => res.json())
         .then((response) => {
           setItems(response);
@@ -39,14 +40,14 @@ const ComponentsScreen = ({ route, navigation }) => {
   }
   const doneSearch = ()=>{
     if(search.length > 0){
-      fetch("http://192.168.1.137:3000/component/search/" + search)
+      fetch(config.BASE_URL + "/component/search/" + search)
       .then((res) => res.json())
       .then((response) => {
         console.log(response)
         setItems(response);
     });
     }else {
-      fetch("http://192.168.1.137:3000/component/")
+      fetch(config.BASE_URL + "/component/")
       .then((res) => res.json())
       .then((response) => {
         setItems(response);

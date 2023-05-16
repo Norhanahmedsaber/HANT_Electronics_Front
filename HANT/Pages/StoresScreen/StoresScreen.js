@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import config from "../../Config/config";
+
 import {
   View,
   Text,
@@ -11,7 +13,7 @@ import {
 const StoresScreen = ({ navigation }) => {
   const [stores, SetStores] = useState([]);
   useEffect(() => {
-    fetch("http://192.168.1.137:3000/stores")
+    fetch(config.BASE_URL + "/stores")
       .then((res) => res.json())
       .then((response) => {
         SetStores(response);

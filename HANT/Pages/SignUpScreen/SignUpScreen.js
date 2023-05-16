@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import config from "../../Config/config";
+
 import {
   StyleSheet,
   Text,
@@ -28,7 +30,7 @@ const SignUpScreen = ({ navigation }) => {
   };
   const signUpClicked = () => {
     if (valid()) {
-      fetch("http://192.168.1.137:3000/signup", {
+      fetch(config.BASE_URL + "/signup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

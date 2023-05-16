@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { View, Text, Button, TextInput, StyleSheet } from "react-native";
 import * as SecureStore from "expo-secure-store";
+import config from "../../Config/config";
 const LoginScreen = ({ navigation }) => {
   const [UserName, SetUserName] = useState("");
   const [Password, SetPasword] = useState("");
@@ -11,7 +12,7 @@ const LoginScreen = ({ navigation }) => {
     return SetPasword(vaLue);
   }
   async function login() {
-    fetch("http://192.168.1.137:3000/Signin", {
+    fetch(config.BASE_URL + "/Signin", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

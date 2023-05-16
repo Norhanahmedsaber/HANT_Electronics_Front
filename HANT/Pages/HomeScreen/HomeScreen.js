@@ -1,6 +1,8 @@
 import React, { useEffect } from "react";
 import { View, Text, Button, TextInput, StyleSheet } from "react-native";
 import * as SecureStore from 'expo-secure-store';
+import config from "../../Config/config";
+
 const HomeScreen = ({ navigation, route }) => {
 
   return (
