@@ -28,7 +28,7 @@ const SignUpScreen = ({ navigation }) => {
   };
   const signUpClicked = () => {
     if (valid()) {
-      fetch("http://192.168.1.5:3000/signup", {
+      fetch("http://192.168.1.141:3000/signup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
