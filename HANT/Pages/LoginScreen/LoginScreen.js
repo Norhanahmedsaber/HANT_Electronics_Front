@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { View, Text, Button, TextInput, StyleSheet } from "react-native";
-import * as SecureStore from 'expo-secure-store';
+import * as SecureStore from "expo-secure-store";
 const LoginScreen = ({ navigation }) => {
   const [UserName, SetUserName] = useState("");
   const [Password, SetPasword] = useState("");
@@ -10,15 +10,14 @@ const LoginScreen = ({ navigation }) => {
   function PasswordHandler(vaLue) {
     return SetPasword(vaLue);
   }
-  async function login () {
-
-    fetch("http://192.168.1.137:3000/Signin", {
+  async function login() {
+    fetch("http://192.168.1.141:3000/Signin", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         username: UserName,
         password: Password,
-        roleid: 1
+        roleid: 1,
       }),
     })
       .then((res) => {
@@ -26,9 +25,9 @@ const LoginScreen = ({ navigation }) => {
       })
       .then(async (response) => {
         if (response.username) {
-          await SecureStore.setItemAsync("token", response.token)
+          await SecureStore.setItemAsync("token", response.token);
           navigation.navigate("HomeScreen", {
-            token: response.token
+            token: response.token,
           });
         } else {
           alert(response.message);

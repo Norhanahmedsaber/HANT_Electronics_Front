@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import * as SecureStore from 'expo-secure-store';
+import * as SecureStore from "expo-secure-store";
 import {
   View,
   Text,
@@ -14,36 +14,41 @@ const MyListsScreen = ({ navigation, route }) => {
   const [list, SetList] = useState([]);
   const [token, setToken] = useState("");
   useEffect(() => {
-    fetch("http://192.168.1.137:3000/list", {
+    fetch("http://192.168.1.141:3000/list", {
       method: "GET",
-      headers: { 
-        "Content-Type": "application/json" ,
-        "Authorization": "Bearer " + route.params.token
-      }
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + route.params.token,
+      },
     })
       .then((res) => res.json())
       .then((response) => {
         SetList(response);
       });
   }, []);
+
   const pressedList=(ListId)=>{
     navigation.navigate("ListScreen",{
       id:ListId,
       token: route.params.token
     })
   } 
+
+
   return (
     <View>
       <FlatList
         data={list}
         renderItem={(ListData) => {
           return (
+
             <Pressable onPress ={()=>{
               pressedList(ListData.item.id)
             }}>
             <View style={styles.listContainer}>
               <Text style={styles.listTextContainer}>{ListData.item.name}</Text>
             </View>
+
             </Pressable>
           );
         }}

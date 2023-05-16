@@ -1,24 +1,37 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, FlatList } from "react-native";
+import { View, Text, StyleSheet, FlatList, Pressable } from "react-native";
 
-const ComponentsScreen = ({route, navigation}) => {
+const ComponentsScreen = ({ route, navigation }) => {
   const [items, setItems] = useState([]);
+
   useEffect(() => {
-    fetch("http://192.168.1.137:3000/component/cat/" + route.params.id)
+    fetch("http://192.168.1.141:3000/component/cat/" + route.params.id)
       .then((res) => res.json())
       .then((response) => {
         setItems(response);
       });
   }, []);
+  const componenetPressed = (componentId) => {
+    navigation.navigate("ViewItemScreen", {
+      id: componentId,
+    });
+  };
+
   return (
     <View style={styles.appContainer}>
       <FlatList
         data={items}
         renderItem={(itemData) => {
           return (
-            <View style={styles.goalItem}>
-              <Text style={styles.goalText}>{itemData.item.name}</Text>
-            </View>
+            <Pressable
+              onPress={() => {
+                componenetPressed(itemData.item.id);
+              }}
+            >
+              <View style={styles.goalItem}>
+                <Text style={styles.goalText}>{itemData.item.name}</Text>
+              </View>
+            </Pressable>
           );
         }}
         keyExtractor={(item, index) => {

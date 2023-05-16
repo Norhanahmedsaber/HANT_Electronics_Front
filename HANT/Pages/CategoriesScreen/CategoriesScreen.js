@@ -12,7 +12,7 @@ import {
 const CategoriesScreen = ({ navigation, route }) => {
   const [Categories, SetCategories] = useState([]);
   useEffect(() => {
-    fetch("http://192.168.1.137:3000/categories")
+    fetch("http://192.168.1.141:3000/categories")
       .then((res) => res.json())
       .then((response) => {
         SetCategories(response);
@@ -24,20 +24,23 @@ const CategoriesScreen = ({ navigation, route }) => {
       mode: route.params.mode
     })
   }
+
   return (
     <View>
       <FlatList
         data={Categories}
         renderItem={(CategoriesData) => {
           return (
-            <Pressable onPress={()=> {
-              categoryPressed(CategoriesData.item.id)
-            }}>
+            <Pressable
+              onPress={() => {
+                categoryPressed(CategoriesData.item.id);
+              }}
+            >
               <View style={styles.listContainer}>
-              <Text style={styles.listTextContainer}>
-                {CategoriesData.item.name}
-              </Text>
-            </View>
+                <Text style={styles.listTextContainer}>
+                  {CategoriesData.item.name}
+                </Text>
+              </View>
             </Pressable>
           );
         }}
