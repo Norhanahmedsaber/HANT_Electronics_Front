@@ -27,6 +27,15 @@ const StoresScreen = ({ navigation }) => {
               <Text style={styles.listTextContainer}>
                 {StoreData.item.name}
               </Text>
+              <Text style={styles.listTextContainer}>
+                {StoreData.item.location}
+              </Text>
+              <Text style={styles.listTextContainer}>
+                {StoreData.item.img_url}
+              </Text>
+              <Text style={styles.listTextContainer}>
+                {StoreData.item.website}
+              </Text>
             </View>
           );
         }}
@@ -65,7 +74,7 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     backgroundColor: "#537188",
     color: "white",
-    height: 35,
+    height: 100,
     justifyContent: "center",
     paddingLeft: 15,
   },

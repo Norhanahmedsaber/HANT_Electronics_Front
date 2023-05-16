@@ -1,24 +1,73 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, FlatList, Pressable } from "react-native";
+import { View, Text, StyleSheet, FlatList, Pressable, TextInput } from "react-native";
 
 const ComponentsScreen = ({ route, navigation }) => {
   const [items, setItems] = useState([]);
+    const [search, setSearch] = useState("");
 
   useEffect(() => {
-    fetch("http://192.168.1.137:3000/component/cat/" + route.params.id)
+    if(route.params.from == "category") {
+      fetch("http://192.168.1.137:3000/component/cat/" + route.params.id)
       .then((res) => res.json())
       .then((response) => {
         setItems(response);
       });
+    }else if(route.params.from == "search") {
+      if(route.params.search.length > 0){
+        fetch("http://192.168.1.137:3000/component/search/" + route.params.search)
+        .then((res) => res.json())
+        .then((response) => {
+          setItems(response);
+      });
+      }else {
+        fetch("http://192.168.1.137:3000/component/")
+        .then((res) => res.json())
+        .then((response) => {
+          setItems(response);
+      });
+      }
+      
+    }
   }, []);
   const componenetPressed = (componentId) => {
     navigation.navigate("ViewItemScreen", {
       id: componentId,
     });
   };
-
+  const searchHandler = (value) => {
+    setSearch(value)
+  }
+  const doneSearch = ()=>{
+    if(search.length > 0){
+      fetch("http://192.168.1.137:3000/component/search/" + search)
+      .then((res) => res.json())
+      .then((response) => {
+        setItems(response);
+    });
+    }else {
+      fetch("http://192.168.1.137:3000/component/")
+      .then((res) => res.json())
+      .then((response) => {
+        setItems(response);
+    });
+    }
+  }
   return (
     <View style={styles.appContainer}>
+      <View style={{padding:15, flexDirection:"row", justifyContent:"center", alignItems:"center"}}>
+        <TextInput
+          style={styles.textInputContainer}
+          placeholder="Search..."
+          onChangeText={searchHandler}
+          onSubmitEditing={doneSearch}
+        />
+        <Pressable 
+          style={{backgroundColor:"cyan",borderRadius:20, borderWidth:1, width:40, height:40, justifyContent:"center", alignItems:"center"}}
+          onPress={doneSearch}
+        >
+          <Text>S</Text>
+        </Pressable>
+      </View>
       <FlatList
         data={items}
         renderItem={(itemData) => {
@@ -97,5 +146,14 @@ const styles = StyleSheet.create({
   },
   goalText: {
     color: "white",
+  },
+  textInputContainer: {
+    borderColor: "grey",
+    borderRadius: 10,
+    height:40,
+    borderWidth: 1,
+    width: "90%",
+    margin: 5,
+    paddingLeft: 10
   },
 });
