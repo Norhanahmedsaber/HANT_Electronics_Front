@@ -11,7 +11,7 @@ import {
 const StoresScreen = ({ navigation }) => {
   const [stores, SetStores] = useState([]);
   useEffect(() => {
-    fetch("http://192.168.1.141:3000/stores")
+    fetch("http://192.168.1.137:3000/stores")
       .then((res) => res.json())
       .then((response) => {
         SetStores(response);
@@ -26,6 +26,15 @@ const StoresScreen = ({ navigation }) => {
             <View style={styles.listContainer}>
               <Text style={styles.listTextContainer}>
                 {StoreData.item.name}
+              </Text>
+              <Text style={styles.listTextContainer}>
+                {StoreData.item.location}
+              </Text>
+              <Text style={styles.listTextContainer}>
+                {StoreData.item.img_url}
+              </Text>
+              <Text style={styles.listTextContainer}>
+                {StoreData.item.website}
               </Text>
             </View>
           );
@@ -65,7 +74,7 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     backgroundColor: "#537188",
     color: "white",
-    height: 35,
+    height: 100,
     justifyContent: "center",
     paddingLeft: 15,
   },

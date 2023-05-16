@@ -48,6 +48,7 @@ const LoginScreen = ({ navigation }) => {
         style={styles.textInputContainer}
         placeholder="Password"
         onChangeText={PasswordHandler}
+        onSubmitEditing={login}
       />
       <View style={styles.SignInContainer}>
         <Button title="Sign In" onPress={login} />

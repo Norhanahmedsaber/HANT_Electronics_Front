@@ -9,11 +9,11 @@ const HomeScreen = ({ navigation, route }) => {
         <View style={styles.buttonsContainer}>
           <View style={styles.catButton}>
             <Button
-              onPress={() => navigation.navigate("CategoriesScreen", {
+              onPress={() => navigation.navigate("Components", {
                 token: route.params.token,
                 mode: 1
               })}
-              title="Categories"
+              title="Components"
             ></Button>
           </View>
 
