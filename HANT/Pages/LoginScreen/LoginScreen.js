@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { View, Text, Button, TextInput, StyleSheet } from "react-native";
-
+import * as SecureStore from 'expo-secure-store';
 const LoginScreen = ({ navigation }) => {
   const [UserName, SetUserName] = useState("");
   const [Password, SetPasword] = useState("");
@@ -10,7 +10,8 @@ const LoginScreen = ({ navigation }) => {
   function PasswordHandler(vaLue) {
     return SetPasword(vaLue);
   }
-  function login() {
+  async function login () {
+
     fetch("http://192.168.1.137:3000/Signin", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -23,10 +24,12 @@ const LoginScreen = ({ navigation }) => {
       .then((res) => {
         return res.json();
       })
-      .then((response) => {
-        console.log(response);
+      .then(async (response) => {
         if (response.username) {
-          navigation.navigate("HomeScreen");
+          await SecureStore.setItemAsync("token", response.token)
+          navigation.navigate("HomeScreen", {
+            token: response.token
+          });
         } else {
           alert(response.message);
         }

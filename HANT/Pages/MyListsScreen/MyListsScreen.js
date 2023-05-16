@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import * as SecureStore from 'expo-secure-store';
 import {
   View,
   Text,
@@ -8,10 +9,17 @@ import {
   FlatList,
 } from "react-native";
 
-const MyListsScreen = ({ navigation }) => {
+const MyListsScreen = ({ navigation, route }) => {
   const [list, SetList] = useState([]);
+  const [token, setToken] = useState("");
   useEffect(() => {
-    fetch("http://192.168.1.137:3000/lists")
+    fetch("http://192.168.1.137:3000/list", {
+      method: "GET",
+      headers: { 
+        "Content-Type": "application/json" ,
+        "Authorization": "Bearer " + route.params.token
+      }
+    })
       .then((res) => res.json())
       .then((response) => {
         SetList(response);

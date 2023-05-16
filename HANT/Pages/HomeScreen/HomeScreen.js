@@ -1,21 +1,26 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { View, Text, Button, TextInput, StyleSheet } from "react-native";
+import * as SecureStore from 'expo-secure-store';
+const HomeScreen = ({ navigation, route }) => {
 
-const HomeScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <View styles={styles.buttonsContainer}>
         <View style={styles.buttonsContainer}>
           <View style={styles.catButton}>
             <Button
-              onPress={() => navigation.navigate("CategoriesScreen")}
+              onPress={() => navigation.navigate("CategoriesScreen", {
+                token: route.params.token
+              })}
               title="Categories"
             ></Button>
           </View>
 
           <View style={styles.catButton}>
             <Button
-              onPress={() => navigation.navigate("MyListsScreen")}
+              onPress={() => navigation.navigate("MyListsScreen", {
+                token: route.params.token
+              })}
               title="My Lists"
             ></Button>
           </View>
@@ -23,14 +28,18 @@ const HomeScreen = ({ navigation }) => {
         <View style={styles.buttonsContainer}>
           <View style={styles.catButton}>
             <Button
-              onPress={() => navigation.navigate("ComponentsScreen")}
+              onPress={() => navigation.navigate("ComponentsScreen", {
+                token: route.params.token
+              })}
               title="Components"
             ></Button>
           </View>
 
           <View style={styles.catButton}>
             <Button
-              onPress={() => navigation.navigate("StoresScreen")}
+              onPress={() => navigation.navigate("StoresScreen", {
+                token: route.params.token
+              })}
               title="Stores"
             ></Button>
           </View>
