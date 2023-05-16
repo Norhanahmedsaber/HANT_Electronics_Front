@@ -42,6 +42,7 @@ const ComponentsScreen = ({ route, navigation }) => {
       fetch("http://192.168.1.137:3000/component/search/" + search)
       .then((res) => res.json())
       .then((response) => {
+        console.log(response)
         setItems(response);
     });
     }else {
