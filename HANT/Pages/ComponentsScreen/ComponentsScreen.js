@@ -3,11 +3,17 @@ import { View, Text, StyleSheet, FlatList, Pressable, TextInput } from "react-na
 import { Button } from "react-native-elements";
 import config from "../../Config/config";
 
+
 const ComponentsScreen = ({ route, navigation }) => {
   const [items, setItems] = useState([]);
     const [search, setSearch] = useState("");
+    const [mode , setMode] = useState(1)
+    const [lists , SetList]=useState([])
+  useEffect(()=>{
+    setMode(route.params.mode)
+  },[])
+  const renderComponent=()=>{
 
-  useEffect(() => {
     if(route.params.from == "category") {
       fetch(config.BASE_URL + "/component/cat/" + route.params.id)
       .then((res) => res.json())
@@ -32,10 +38,28 @@ const ComponentsScreen = ({ route, navigation }) => {
       }
       
     }
+}
+useEffect(() => {
+  fetch(config.BASE_URL + "/list", {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + route.params.token,
+    },
+  })
+    .then((res) => res.json())
+    .then((response) => {
+      SetList(response);
+    });
+}, []);
+  useEffect(() => {
+    renderComponent();
   }, []);
   const componenetPressed = (componentId) => {
     navigation.navigate("ViewItemScreen", {
       id: componentId,
+      listId:route.params.listId,
+      mode:route.params.mode
     });
   };
   const searchHandler = (value) => {
@@ -69,6 +93,7 @@ const ComponentsScreen = ({ route, navigation }) => {
     .then((res)=>res.json())
     .then((response)=>{
       alert(response.message)
+      renderComponent();
     })
 }
   return (
@@ -98,19 +123,23 @@ const ComponentsScreen = ({ route, navigation }) => {
             >
               <View style={styles.listContainer}>
                 <Text style={styles.listTextContainer}>{itemData.item.name}</Text>
-                <Button title="+" onPress={()=>{
+                <View>
+                
+                
+                {mode==2?(<Button title="+" onPress={()=>{
                   addComponent(itemData.item.id)
-                }}></Button>
+                }}>
+              </Button>):(<View></View>)}
               </View>
-              
-            
-            </Pressable>
+              </View>
+              </Pressable>
           );
         }}
         keyExtractor={(item, index) => {
           return item.id;
         }}
       />
+     
     </View>
   );
 };
