@@ -33,7 +33,8 @@ const HomeScreen = ({ navigation, route }) => {
           <View style={styles.catButton}>
             <Button
               onPress={() => navigation.navigate("ComponentsScreen", {
-                token: route.params.token
+                token: route.params.token,
+                mode:1
               })}
               title="Components"
             ></Button>
