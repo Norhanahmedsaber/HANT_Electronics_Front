@@ -12,7 +12,7 @@ const LoginScreen = ({ navigation }) => {
     return SetPasword(vaLue);
   }
   async function login() {
-
+    console.log(config.BASE_URL)
     fetch(config.BASE_URL + "/Signin", {
       method: "POST",
       headers: { "Content-Type": "application/json" },

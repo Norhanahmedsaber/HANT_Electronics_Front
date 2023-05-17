@@ -47,19 +47,22 @@ const ListScreen = ({ route, navigation }) => {
                 <Button title="-" onPress={()=>{
                   deleteItem(itemData.item.id)
                 }}></Button>
-                <Button title="+" onPress={()=>{
-                  addItem();
-                }}></Button>
               </View>
-          </View>
+            </View>
             
 
           );
         }}
+
         keyExtractor={(item, index) => {
           return item.id;
         }}
       />
+      <View>
+        <Button title="Add to List" onPress={()=>{
+          addItem();
+        }}></Button>
+      </View>
     </View>
   );
 };
