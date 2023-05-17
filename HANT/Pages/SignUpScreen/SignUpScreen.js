@@ -30,7 +30,6 @@ const SignUpScreen = ({ navigation }) => {
   };
   const signUpClicked = () => {
     if (valid()) {
-
       fetch(config.BASE_URL + "/signup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -45,7 +44,7 @@ const SignUpScreen = ({ navigation }) => {
         })
         .then((res) => {
           if (res.Data === "Done") {
-            navigation.navigate("HomeScreen");
+            navigation.navigate("Sign In");
           } else {
             alert("Error");
           }

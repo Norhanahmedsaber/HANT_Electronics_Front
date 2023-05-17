@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import * as SecureStore from "expo-secure-store";
-import config from "../../Config/config";
+import config from "../../Config/config"
 
 import {
   View,
@@ -10,6 +10,7 @@ import {
   StyleSheet,
   FlatList,
   Pressable,
+  Switch
 } from "react-native";
 
 const MyListsScreen = ({ navigation, route }) => {
@@ -18,35 +19,46 @@ const MyListsScreen = ({ navigation, route }) => {
   const [token, setToken] = useState("");
   const [deleted, setDeleted] = useState(false)
   const [fav,setToFav]=useState(false)
+  const [added,settoadded]=useState(false)
+  const [isEnabled, setIsEnabled] = useState(false);
+  const toggleSwitch = () => {
+    setIsEnabled(previousState => !previousState);
+  }
+  const renderLists  = () => {
+    if(!isEnabled) {
+      fetch(config.BASE_URL + "/list", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + route.params.token,
+        },
+      })
+        .then((res) => res.json())
+        .then((response) => {
+          SetList(response);
+        });
+    }else {
+      fetch(config.BASE_URL + "/list/get/favs", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + route.params.token,
+        },
+      })
+        .then((res) => res.json())
+        .then((response) => {
+          SetList(response);
+        });
+    }
+  }
+  useEffect(()=>{
+    renderLists()
+  }, [isEnabled])
   useEffect(() => {
-    fetch(config.BASE_URL + "/list", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + route.params.token,
-      },
-    })
-      .then((res) => res.json())
-      .then((response) => {
-        SetList(response);
-      });
+    renderLists();
   }, []);
-  useEffect(() => {
-    fetch(config.BASE_URL + "/list", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + route.params.token,
-      },
-    })
-      .then((res) => res.json())
-      .then((response) => {
-        SetList(response);
-        setDeleted(false)
-      });
-  }, [deleted]);
-  useEffect(() => {
 
+  useEffect(() => {
     fetch(config.BASE_URL + "/list", {
       method: "GET",
       headers: {
@@ -68,7 +80,7 @@ const MyListsScreen = ({ navigation, route }) => {
     })
   } 
  const addList=()=>{
-  fetch(config.BASE_URL + "/list",{
+  fetch(config.BASE_URL + "/list",{ 
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -77,6 +89,7 @@ const MyListsScreen = ({ navigation, route }) => {
   .then((res)=>res.json())
   .then((response)=>{
     const id = response.id;
+    renderLists()
     navigation.navigate("ListScreen",{
       id:id,
       token: route.params.token
@@ -84,7 +97,7 @@ const MyListsScreen = ({ navigation, route }) => {
   })
  }
  const deleteList=(id)=>{
-  fetch(config.BASE_URL + "/list/user/" + id,{
+  fetch(config.BASE_URL + "/list/user/" + id,{ 
     method: "DELETE",
     headers: {
       "Content-Type": "application/json",
@@ -94,9 +107,10 @@ const MyListsScreen = ({ navigation, route }) => {
       if(response.message === "deleted") {
         setDeleted(true);
       }
+      renderLists()
     })
  }
-const setfav=(id)=>{
+const togglefav=(id)=>{
   fetch(config.BASE_URL + "/list/setfav/" + id,{
     method: "PUT",
     headers: {
@@ -107,10 +121,11 @@ const setfav=(id)=>{
       if(response.message === "Added to fav") {
         setToFav(true);
       }
+      renderLists();
     })
 }
 const getFavs=()=>{
-  fetch(config.BASE_URL + "/list/get/favs",{
+  fetch(config.BASE_URL + "/list/get/favs",{ 
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -120,7 +135,6 @@ const getFavs=()=>{
       SetList(response);
     })
 }
-
   const searchHandler = (value) => {
     setSearch(value)
   }
@@ -175,13 +189,15 @@ const getFavs=()=>{
               <Pressable onPress ={()=>{
                 pressedList(ListData.item.id)
               }}>
+                  <View style={styles.listContainer} >
+                    <Text style={styles.listTextContainer}>{ListData.item.name}</Text>
+                    <View style = {{flexDirection: "row"}}>
+                      <Button title="D" onPress={()=> {deleteList(ListData.item.id)}}></Button>
+                      <Button title="E" onPress={()=> {pressedList(ListData.item.id)}}></Button>
+                      <Button title="F" onPress={()=> {setfav(ListData.item.id)}}></Button>
+                    </View>
+                  </View>
               </Pressable>
-              <View style={styles.listContainer} >
-                <Text style={styles.listTextContainer}>{ListData.item.name}</Text>
-                <Button title="D" onPress={()=> {deleteList(ListData.item.id)}}></Button>
-                <Button title="E" onPress={()=> {pressedList(ListData.item.id)}}></Button>
-                <Button title="F" onPress={()=> {setfav(ListData.item.id)}}></Button>
-              </View>
             </View>
           );
         }}
@@ -193,7 +209,8 @@ const getFavs=()=>{
       <Button title="add" onPress={addList}></Button>
       </View>
       <View style={styles.AddButtonContainer}>
-      <Button title="favs" onPress={getFavs}></Button>
+      <Switch title="favs"   onValueChange={toggleSwitch}
+      value={isEnabled}></Switch>
       </View>
     </View>
   );
@@ -230,7 +247,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#537188",
     color: "white",
     height: 35,
-    justifyContent: "center",
+    justifyContent: "space-between",
     paddingLeft: 15,
   },
   listTextContainer: {
