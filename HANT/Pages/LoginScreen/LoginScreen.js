@@ -12,7 +12,6 @@ const LoginScreen = ({ navigation }) => {
     return SetPasword(vaLue);
   }
   async function login() {
-
     fetch(config.BASE_URL + "/Signin", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -39,6 +38,32 @@ const LoginScreen = ({ navigation }) => {
         console.log(error);
       });
   }
+
+  async function logInAsGuest() {
+    fetch(config.BASE_URL + "/users/guest", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => {
+        return res.json();
+      })
+      .then(async (response) => {
+        if (response.username) {
+          await SecureStore.setItemAsync("token", response.token);
+          navigation.navigate("HomeScreen", {
+            token: response.token,
+          });
+        } else {
+          alert(response.message);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
   return (
     <View style={styles.PageContainer}>
       <TextInput
@@ -56,11 +81,22 @@ const LoginScreen = ({ navigation }) => {
         <Button title="Sign In" onPress={login} />
       </View>
       <View style={styles.GuestContainer}>
-        <Button title="Guest"></Button>
+        <Button title="Guest" onPress={logInAsGuest}></Button>
       </View>
       <View style={styles.SignUpContainer}>
-        <Text>I donot have an account </Text>
-        <Text onPress={() => navigation.navigate("Sign Up")}> Sign Up</Text>
+        <View style={{ paddingLeft: 15 }}>
+          <Text>I dont have an account </Text>
+        </View>
+
+        <View style={styles.SignUp}>
+          <Text
+            onPress={() => navigation.navigate("Sign Up")}
+            style={styles.SignUp}
+          >
+            {" "}
+            Sign Up
+          </Text>
+        </View>
       </View>
     </View>
   );
@@ -75,6 +111,9 @@ const styles = StyleSheet.create({
     paddingTop: 200,
     paddingBottom: 5,
     width: "100%",
+  },
+  SignUp: {
+    color: "blue",
   },
   SignInContainer: {
     flexDirection: "column",
