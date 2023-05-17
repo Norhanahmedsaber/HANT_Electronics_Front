@@ -1,10 +1,26 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, FlatList , Button} from "react-native";
+import { View, Text, StyleSheet, FlatList , Button, TextInput} from "react-native";
 import config from "../../Config/config";
 
 const ListScreen = ({ route, navigation }) => {
   const [items, setItems] = useState([]);
+  const [name, setName] = useState("");
+  const [note, setNote] = useState("")
+  const nameHandler = (value) => setName(value)
+  const noteHandler = (value) => setNote(value)
+
   useEffect(() => {
+    fetch(config.BASE_URL + "/list/" + route.params.id, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + route.params.token,
+      },})
+    .then((res) => res.json())
+    .then((response) => {
+      setName(response.name)
+      setNote(response.note)
+    })
     fetch(config.BASE_URL + "/item/" + route.params.id)
 
       .then((res) => res.json())
@@ -13,7 +29,18 @@ const ListScreen = ({ route, navigation }) => {
       });
   }, []);
 
-
+  const edit = () => {
+    fetch(config.BASE_URL + "/list/" + route.params.id, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        name,
+        note
+      })
+    })
+  }
   function deleteItem(id) {
     console.log(id)
     fetch(config.BASE_URL + "/item/" + id , {method : 'DELETE'})
@@ -36,6 +63,22 @@ const ListScreen = ({ route, navigation }) => {
 
   return (
     <View style={styles.appContainer}>
+      <View>
+        <TextInput
+          style={styles.textInputContainer}
+          placeholder="Name"
+          value={name}
+          onChangeText={nameHandler}
+          onEndEditing={edit}
+        />
+        <TextInput
+          style={styles.textInputContainer2}
+          placeholder="Note..."
+          value={note}
+          onChangeText={noteHandler}
+          onEndEditing={edit}
+        />
+      </View>
       <FlatList
         data={items}
         renderItem={(itemData) => {
@@ -93,6 +136,23 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     backgroundColor: "#CBB279",
     height: 40,
+  },
+  textInputContainer: {
+    borderColor: "grey",
+    borderRadius: 6,
+    borderWidth: 1,
+    width: "90%",
+    margin: 5,
+    paddingLeft: 10
+  },
+  textInputContainer2: {
+    borderColor: "grey",
+    borderRadius: 6,
+    borderWidth: 1,
+    width: "90%",
+    margin: 5,
+    height: 100,
+    paddingLeft: 10
   },
   addGoal: {
     borderWidth: 1,

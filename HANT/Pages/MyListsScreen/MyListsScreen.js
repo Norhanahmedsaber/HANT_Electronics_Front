@@ -46,7 +46,6 @@ const MyListsScreen = ({ navigation, route }) => {
       });
   }, [deleted]);
   useEffect(() => {
-
     fetch(config.BASE_URL + "/list", {
       method: "GET",
       headers: {
@@ -68,7 +67,7 @@ const MyListsScreen = ({ navigation, route }) => {
     })
   } 
  const addList=()=>{
-  fetch(config.BASE_URL + "/list",{
+  fetch(config.BASE_URL + "/list",{ 
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -84,7 +83,7 @@ const MyListsScreen = ({ navigation, route }) => {
   })
  }
  const deleteList=(id)=>{
-  fetch(config.BASE_URL + "/list/user/" + id,{
+  fetch(config.BASE_URL + "/list/user/" + id,{ 
     method: "DELETE",
     headers: {
       "Content-Type": "application/json",
@@ -97,7 +96,7 @@ const MyListsScreen = ({ navigation, route }) => {
     })
  }
 const setfav=(id)=>{
-  fetch(config.BASE_URL + "/list/setfav/" + id,{
+  fetch(config.BASE_URL + "/list/setfav/" + id,{ 
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
@@ -110,7 +109,7 @@ const setfav=(id)=>{
     })
 }
 const getFavs=()=>{
-  fetch(config.BASE_URL + "/list/get/favs",{
+  fetch(config.BASE_URL + "/list/get/favs",{ 
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -175,13 +174,15 @@ const getFavs=()=>{
               <Pressable onPress ={()=>{
                 pressedList(ListData.item.id)
               }}>
+                  <View style={styles.listContainer} >
+                    <Text style={styles.listTextContainer}>{ListData.item.name}</Text>
+                    <View style = {{flexDirection: "row"}}>
+                      <Button title="D" onPress={()=> {deleteList(ListData.item.id)}}></Button>
+                      <Button title="E" onPress={()=> {pressedList(ListData.item.id)}}></Button>
+                      <Button title="F" onPress={()=> {setfav(ListData.item.id)}}></Button>
+                    </View>
+                  </View>
               </Pressable>
-              <View style={styles.listContainer} >
-                <Text style={styles.listTextContainer}>{ListData.item.name}</Text>
-                <Button title="D" onPress={()=> {deleteList(ListData.item.id)}}></Button>
-                <Button title="E" onPress={()=> {pressedList(ListData.item.id)}}></Button>
-                <Button title="F" onPress={()=> {setfav(ListData.item.id)}}></Button>
-              </View>
             </View>
           );
         }}
@@ -230,7 +231,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#537188",
     color: "white",
     height: 35,
-    justifyContent: "center",
+    justifyContent: "space-between",
     paddingLeft: 15,
   },
   listTextContainer: {
