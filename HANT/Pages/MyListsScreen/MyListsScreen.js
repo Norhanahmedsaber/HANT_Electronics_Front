@@ -46,6 +46,7 @@ const MyListsScreen = ({ navigation, route }) => {
       });
   }, [deleted]);
   useEffect(() => {
+
     fetch(config.BASE_URL + "/list", {
       method: "GET",
       headers: {
@@ -67,7 +68,7 @@ const MyListsScreen = ({ navigation, route }) => {
     })
   } 
  const addList=()=>{
-  fetch(config.BASE_URL + "/list",{ 
+  fetch(config.BASE_URL + "/list",{
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -83,7 +84,7 @@ const MyListsScreen = ({ navigation, route }) => {
   })
  }
  const deleteList=(id)=>{
-  fetch(config.BASE_URL + "/list/user/" + id,{ 
+  fetch(config.BASE_URL + "/list/user/" + id,{
     method: "DELETE",
     headers: {
       "Content-Type": "application/json",
@@ -96,7 +97,7 @@ const MyListsScreen = ({ navigation, route }) => {
     })
  }
 const setfav=(id)=>{
-  fetch(config.BASE_URL + "/list/setfav/" + id,{ 
+  fetch(config.BASE_URL + "/list/setfav/" + id,{
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
@@ -109,7 +110,7 @@ const setfav=(id)=>{
     })
 }
 const getFavs=()=>{
-  fetch(config.BASE_URL + "/list/get/favs",{ 
+  fetch(config.BASE_URL + "/list/get/favs",{
     method: "GET",
     headers: {
       "Content-Type": "application/json",

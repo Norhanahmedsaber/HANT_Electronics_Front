@@ -30,6 +30,7 @@ const SignUpScreen = ({ navigation }) => {
   };
   const signUpClicked = () => {
     if (valid()) {
+
       fetch(config.BASE_URL + "/signup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },

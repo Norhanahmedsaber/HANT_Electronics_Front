@@ -13,17 +13,24 @@ const ListScreen = ({ route, navigation }) => {
       });
   }, []);
 
+
   function deleteItem(id) {
     console.log(id)
     fetch(config.BASE_URL + "/item/" + id , {method : 'DELETE'})
       .then((response) => {
           fetch(config.BASE_URL + "/item/" + route.params.id)
-
           .then((res) => res.json())
           .then((result) => {
           setItems(result);
         });
       });
+  }
+
+  const addItem = ()=>{
+    navigation.navigate("Components",{
+      token:route.params.token,
+      mode:route.params.mode
+    })
   }
 
   return (
@@ -33,19 +40,17 @@ const ListScreen = ({ route, navigation }) => {
         renderItem={(itemData) => {
           return (
             <View style={styles.goalItem}>
-              <View>
-              <Text style={styles.goalText}>{itemData.item.name}</Text>
-              <Text style={styles.goalText}>{itemData.item.quantity}</Text>
-              </View>
-              <View>
-                
-                <Button title="Delete" onPress={()=>{
+              <View style={styles.ListsContainer}>
+                <Text style={styles.listTextContainer}>{itemData.item.name}</Text>
+                <Text style={styles.listTextContainer}>{itemData.item.quantity}</Text>
+                <Button title="-" onPress={()=>{
                   deleteItem(itemData.item.id)
                 }}></Button>
+                <Button title="+" onPress={()=>{
+                  addItem();
+                }}></Button>
               </View>
-
-
-            </View>
+          </View>
             
 
           );
@@ -114,4 +119,14 @@ const styles = StyleSheet.create({
   goalText: {
     color: "white",
   },
+
+  ListsContainer: {
+    flexDirection: "row",
+    padding: 15,
+    borderBottomWidth: 1,      
+  },
+  listTextContainer: {
+    color: "white",
+  }
 });
+

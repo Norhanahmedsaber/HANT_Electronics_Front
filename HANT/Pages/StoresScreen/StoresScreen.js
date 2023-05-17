@@ -13,6 +13,7 @@ import {
 const StoresScreen = ({ navigation }) => {
   const [stores, SetStores] = useState([]);
   useEffect(() => {
+
     fetch(config.BASE_URL + "/stores")
       .then((res) => res.json())
       .then((response) => {

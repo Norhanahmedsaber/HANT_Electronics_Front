@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, FlatList, Pressable, TextInput } from "react-native";
+import { Button } from "react-native-elements";
 import config from "../../Config/config";
 
 const ComponentsScreen = ({ route, navigation }) => {
@@ -15,16 +16,25 @@ const ComponentsScreen = ({ route, navigation }) => {
       });
     }else if(route.params.from == "search") {
       if(route.params.search.length > 0){
+<<<<<<< HEAD
+        fetch("http://192.168.1.102:3000/component/search/" + route.params.search)
+=======
         fetch(config.BASE_URL + "/component/search/" + route.params.search)
+>>>>>>> master
         .then((res) => res.json())
         .then((response) => {
           setItems(response);
       });
       }else {
+<<<<<<< HEAD
+        fetch("http://192.168.1.102:3000/component/")
+=======
         fetch(config.BASE_URL + "/component/")
+>>>>>>> master
         .then((res) => res.json())
         .then((response) => {
           setItems(response);
+          console.log(response)
       });
       }
       
@@ -40,18 +50,39 @@ const ComponentsScreen = ({ route, navigation }) => {
   }
   const doneSearch = ()=>{
     if(search.length > 0){
+<<<<<<< HEAD
+      fetch("http://192.168.1.102:3000/component/search/" + search)
+=======
       fetch(config.BASE_URL + "/component/search/" + search)
+>>>>>>> master
       .then((res) => res.json())
       .then((response) => {
         console.log(response)
         setItems(response);
     });
     }else {
+<<<<<<< HEAD
+      fetch("http://192.168.1.102:3000/component/")
+=======
       fetch(config.BASE_URL + "/component/")
+>>>>>>> master
       .then((res) => res.json())
       .then((response) => {
         setItems(response);
     });
+    }
+
+    const addComponent = (listId , itemId ,data)=>{
+        fetch("http://192.168.1.102:3000/add/"+listId+itemId , {
+          method:"POST",
+          headers:{
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + route.params.token
+          }})
+        .then((res)=>res.json())
+        .then((response)=>{
+          console.log("Added Sucessfully"+data)
+        })
     }
   }
   return (
@@ -79,9 +110,14 @@ const ComponentsScreen = ({ route, navigation }) => {
                 componenetPressed(itemData.item.id);
               }}
             >
-              <View style={styles.goalItem}>
-                <Text style={styles.goalText}>{itemData.item.name}</Text>
+              <View style={styles.listContainer}>
+                <Text style={styles.listTextContainer}>{itemData.item.name}</Text>
+                <Button title="+" onPress={()=>{
+                  addComponent(itemData.item.listId, itemData.item.itemId ,itemData.item)
+                }}></Button>
               </View>
+              
+            
             </Pressable>
           );
         }}
@@ -157,5 +193,19 @@ const styles = StyleSheet.create({
     width: "90%",
     margin: 5,
     paddingLeft: 10
+  },
+  listContainer: {
+    flexDirection:'row',
+    margin: 8,
+    paddinf: 8,
+    borderRadius: 6,
+    backgroundColor: "#537188",
+    color: "white",
+    height: 35,
+    justifyContent: "center",
+    paddingLeft: 15,
+  },
+  listTextContainer: {
+    color: "white",
   },
 });
