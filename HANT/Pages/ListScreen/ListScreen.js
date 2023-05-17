@@ -29,7 +29,8 @@ const ListScreen = ({ route, navigation }) => {
   const addItem = ()=>{
     navigation.navigate("Components",{
       token:route.params.token,
-      mode:route.params.mode
+      mode:2,
+      listId: route.params.id
     })
   }
 

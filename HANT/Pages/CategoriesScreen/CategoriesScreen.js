@@ -27,7 +27,8 @@ const CategoriesScreen = ({ navigation, route }) => {
     navigation.navigate("ComponentsScreen", {
       id: categoryId,
       mode: route.params.mode,
-      from: "category"
+      from: "category",
+      listId: route.params.listId
     })
   }
   const searchHandler = (value) => {
@@ -37,7 +38,8 @@ const CategoriesScreen = ({ navigation, route }) => {
     navigation.navigate("ComponentsScreen",{
       search: search,
       mode: route.params.mode,
-      from: "search"
+      from: "search",
+      listId: route.params.listId
     })
 
   }
