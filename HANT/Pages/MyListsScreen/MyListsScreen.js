@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import * as SecureStore from "expo-secure-store";
-import config from "../../Config/config";
+import config from "../../Config/config"
 
 import {
   View,
@@ -10,6 +10,7 @@ import {
   StyleSheet,
   FlatList,
   Pressable,
+  Switch
 } from "react-native";
 
 const MyListsScreen = ({ navigation, route }) => {
@@ -18,33 +19,45 @@ const MyListsScreen = ({ navigation, route }) => {
   const [token, setToken] = useState("");
   const [deleted, setDeleted] = useState(false)
   const [fav,setToFav]=useState(false)
+  const [added,settoadded]=useState(false)
+  const [isEnabled, setIsEnabled] = useState(false);
+  const toggleSwitch = () => {
+    setIsEnabled(previousState => !previousState);
+  }
+  const renderLists  = () => {
+    if(!isEnabled) {
+      fetch(config.BASE_URL + "/list", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + route.params.token,
+        },
+      })
+        .then((res) => res.json())
+        .then((response) => {
+          SetList(response);
+        });
+    }else {
+      fetch(config.BASE_URL + "/list/get/favs", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + route.params.token,
+        },
+      })
+        .then((res) => res.json())
+        .then((response) => {
+          SetList(response);
+        });
+    }
+  }
+  useEffect(()=>{
+    renderLists()
+  }, [isEnabled])
   useEffect(() => {
-    fetch(config.BASE_URL + "/list", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + route.params.token,
-      },
-    })
-      .then((res) => res.json())
-      .then((response) => {
-        SetList(response);
-      });
+    renderLists();
   }, []);
-  useEffect(() => {
-    fetch(config.BASE_URL + "/list", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + route.params.token,
-      },
-    })
-      .then((res) => res.json())
-      .then((response) => {
-        SetList(response);
-        setDeleted(false)
-      });
-  }, [deleted]);
+
   useEffect(() => {
     fetch(config.BASE_URL + "/list", {
       method: "GET",
@@ -76,6 +89,7 @@ const MyListsScreen = ({ navigation, route }) => {
   .then((res)=>res.json())
   .then((response)=>{
     const id = response.id;
+    renderLists()
     navigation.navigate("ListScreen",{
       id:id,
       token: route.params.token
@@ -93,10 +107,11 @@ const MyListsScreen = ({ navigation, route }) => {
       if(response.message === "deleted") {
         setDeleted(true);
       }
+      renderLists()
     })
  }
-const setfav=(id)=>{
-  fetch(config.BASE_URL + "/list/setfav/" + id,{ 
+const togglefav=(id)=>{
+  fetch(config.BASE_URL + "/list/setfav/" + id,{
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
@@ -106,6 +121,7 @@ const setfav=(id)=>{
       if(response.message === "Added to fav") {
         setToFav(true);
       }
+      renderLists();
     })
 }
 const getFavs=()=>{
@@ -119,7 +135,6 @@ const getFavs=()=>{
       SetList(response);
     })
 }
-
   const searchHandler = (value) => {
     setSearch(value)
   }
@@ -194,7 +209,8 @@ const getFavs=()=>{
       <Button title="add" onPress={addList}></Button>
       </View>
       <View style={styles.AddButtonContainer}>
-      <Button title="favs" onPress={getFavs}></Button>
+      <Switch title="favs"   onValueChange={toggleSwitch}
+      value={isEnabled}></Switch>
       </View>
     </View>
   );
