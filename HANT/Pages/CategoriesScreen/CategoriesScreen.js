@@ -8,14 +8,14 @@ import {
   FlatList,
   Pressable,
   TextInput,
-  Button
+  Button,
 } from "react-native";
 import SearchBar, { ButtonGroup } from "react-native-elements";
 
 const CategoriesScreen = ({ navigation, route }) => {
   const [Categories, SetCategories] = useState([]);
   const [search, setSearch] = useState("");
-  const [clicked, setClicked] = useState(false)
+  const [clicked, setClicked] = useState(false);
   useEffect(() => {
     fetch(config.BASE_URL + "/categories")
       .then((res) => res.json())
@@ -28,32 +28,46 @@ const CategoriesScreen = ({ navigation, route }) => {
       id: categoryId,
       mode: route.params.mode,
       from: "category",
-      listId: route.params.listId
-    })
-  }
+      listId: route.params.listId,
+    });
+  };
   const searchHandler = (value) => {
-    setSearch(value)
-  }
-  const doneSearch = ()=>{
-    navigation.navigate("ComponentsScreen",{
+    setSearch(value);
+  };
+  const doneSearch = () => {
+    navigation.navigate("ComponentsScreen", {
       search: search,
       mode: route.params.mode,
       from: "search",
-      listId: route.params.listId
-    })
-
-  }
+      listId: route.params.listId,
+    });
+  };
   return (
-    <View style={{paddingT:0, flexDirection:"column"}}>
-      <View style={{padding:15, flexDirection:"row", justifyContent:"center", alignItems:"center"}}>
+    <View style={{ paddingT: 0, flexDirection: "column" }}>
+      <View
+        style={{
+          padding: 15,
+          flexDirection: "row",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
         <TextInput
           style={styles.textInputContainer}
           placeholder="Search..."
           onChangeText={searchHandler}
           onSubmitEditing={doneSearch}
         />
-        <Pressable 
-          style={{backgroundColor:"cyan",borderRadius:20, borderWidth:1, width:40, height:40, justifyContent:"center", alignItems:"center"}}
+        <Pressable
+          style={{
+            backgroundColor: "cyan",
+            borderRadius: 20,
+            borderWidth: 1,
+            width: 40,
+            height: 40,
+            justifyContent: "center",
+            alignItems: "center",
+          }}
           onPress={doneSearch}
         >
           <Text>S</Text>
@@ -121,10 +135,10 @@ const styles = StyleSheet.create({
   textInputContainer: {
     borderColor: "grey",
     borderRadius: 10,
-    height:40,
+    height: 40,
     borderWidth: 1,
     width: "90%",
     margin: 5,
-    paddingLeft: 10
+    paddingLeft: 10,
   },
 });
