@@ -11,7 +11,7 @@ const LoginScreen = ({ navigation }) => {
     return SetPasword(vaLue);
   }
   async function login() {
-    fetch("http://192.168.1.137:3000/Signin", {
+    fetch("http://192.168.1.102:3000/Signin", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

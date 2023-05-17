@@ -11,7 +11,7 @@ import {
 const StoresScreen = ({ navigation }) => {
   const [stores, SetStores] = useState([]);
   useEffect(() => {
-    fetch("http://192.168.1.137:3000/stores")
+    fetch("http://192.168.1.102:3000/stores")
       .then((res) => res.json())
       .then((response) => {
         SetStores(response);

@@ -4,7 +4,7 @@ import { View, Text, StyleSheet, FlatList , Button} from "react-native";
 const ListScreen = ({ route, navigation }) => {
   const [items, setItems] = useState([]);
   useEffect(() => {
-    fetch("http://192.168.1.137:3000/item/" + route.params.id)
+    fetch("http://192.168.1.102:3000/item/" + route.params.id)
 
       .then((res) => res.json())
       .then((response) => {
@@ -12,17 +12,23 @@ const ListScreen = ({ route, navigation }) => {
       });
   }, []);
 
-  function deleteItem(id) {
-    console.log(id)
-    fetch("http://192.168.1.137:3000/item/" + id , {method : 'DELETE'})
+  const deleteItem = (id) => {
+    fetch("http://192.168.1.102:3000/item/" + id , {method : 'DELETE'})
       .then((response) => {
-          fetch("http://192.168.1.137:3000/item/" + route.params.id)
+          fetch("http://192.168.1.102:3000/item/" + route.params.id)
 
           .then((res) => res.json())
           .then((result) => {
           setItems(result);
         });
       });
+  }
+
+  const addItem = ()=>{
+    navigation.navigate("Components",{
+      token:route.params.token,
+      mode:route.params.mode
+    })
   }
 
   return (
@@ -32,19 +38,17 @@ const ListScreen = ({ route, navigation }) => {
         renderItem={(itemData) => {
           return (
             <View style={styles.goalItem}>
-              <View>
-              <Text style={styles.goalText}>{itemData.item.name}</Text>
-              <Text style={styles.goalText}>{itemData.item.quantity}</Text>
-              </View>
-              <View>
-                
-                <Button title="Delete" onPress={()=>{
+              <View style={styles.ListsContainer}>
+                <Text style={styles.listTextContainer}>{itemData.item.name}</Text>
+                <Text style={styles.listTextContainer}>{itemData.item.quantity}</Text>
+                <Button title="-" onPress={()=>{
                   deleteItem(itemData.item.id)
                 }}></Button>
+                <Button title="+" onPress={()=>{
+                  addItem();
+                }}></Button>
               </View>
-
-
-            </View>
+          </View>
             
 
           );
@@ -113,4 +117,14 @@ const styles = StyleSheet.create({
   goalText: {
     color: "white",
   },
+
+  ListsContainer: {
+    flexDirection: "row",
+    padding: 15,
+    borderBottomWidth: 1,      
+  },
+  listTextContainer: {
+    color: "white",
+  }
 });
+

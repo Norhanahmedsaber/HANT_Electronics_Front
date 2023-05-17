@@ -17,7 +17,7 @@ const MyListsScreen = ({ navigation, route }) => {
   const [deleted, setDeleted] = useState(false)
   const [fav,setToFav]=useState(false)
   useEffect(() => {
-    fetch("http://192.168.1.137:3000/list", {
+    fetch("http://192.168.1.102:3000/list", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -30,7 +30,7 @@ const MyListsScreen = ({ navigation, route }) => {
       });
   }, []);
   useEffect(() => {
-    fetch("http://192.168.1.137:3000/list", {
+    fetch("http://192.168.1.102:3000/list", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -44,7 +44,7 @@ const MyListsScreen = ({ navigation, route }) => {
       });
   }, [deleted]);
   useEffect(() => {
-    fetch("http://192.168.1.137:3000/list", {
+    fetch("http://192.168.1.102:3000/list", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -65,7 +65,7 @@ const MyListsScreen = ({ navigation, route }) => {
     })
   } 
  const addList=()=>{
-  fetch("http://192.168.1.137:3000/list",{ 
+  fetch("http://192.168.1.102:3000/list",{ 
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -81,7 +81,7 @@ const MyListsScreen = ({ navigation, route }) => {
   })
  }
  const deleteList=(id)=>{
-  fetch("http://192.168.1.137:3000/list/user/" + id,{ 
+  fetch("http://192.168.1.102:3000/list/user/" + id,{ 
     method: "DELETE",
     headers: {
       "Content-Type": "application/json",
@@ -94,7 +94,7 @@ const MyListsScreen = ({ navigation, route }) => {
     })
  }
 const setfav=(id)=>{
-  fetch("http://192.168.1.137:3000/list/setfav/" + id,{ 
+  fetch("http://192.168.1.102:3000/list/setfav/" + id,{ 
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
@@ -107,7 +107,7 @@ const setfav=(id)=>{
     })
 }
 const getFavs=()=>{
-  fetch("http://192.168.1.137:3000/list/get/favs",{ 
+  fetch("http://192.168.1.102:3000/list/get/favs",{ 
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -123,7 +123,7 @@ const getFavs=()=>{
   }
   const doneSearch = ()=>{
     if(search.length > 0){
-      fetch("http://192.168.1.137:3000/list/search/" + search, {
+      fetch("http://192.168.1.102:3000/list/search/" + search, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -135,7 +135,7 @@ const getFavs=()=>{
         SetList(response);
     });
     }else {
-      fetch("http://192.168.1.137:3000/list", {
+      fetch("http://192.168.1.102:3000/list", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
