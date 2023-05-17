@@ -8,7 +8,7 @@ const ComponentsScreen = ({ route, navigation }) => {
   const [items, setItems] = useState([]);
     const [search, setSearch] = useState("");
     const [mode , setMode] = useState(1)
-    const [lists , SetList]=useState([])
+   
   useEffect(()=>{
     setMode(route.params.mode)
   },[])
@@ -39,24 +39,13 @@ const ComponentsScreen = ({ route, navigation }) => {
       
     }
 }
-useEffect(() => {
-  fetch(config.BASE_URL + "/list", {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: "Bearer " + route.params.token,
-    },
-  })
-    .then((res) => res.json())
-    .then((response) => {
-      SetList(response);
-    });
-}, []);
+
   useEffect(() => {
     renderComponent();
   }, []);
   const componenetPressed = (componentId) => {
     navigation.navigate("ViewItemScreen", {
+      token:route.params.token,
       id: componentId,
       listId:route.params.listId,
       mode:route.params.mode
