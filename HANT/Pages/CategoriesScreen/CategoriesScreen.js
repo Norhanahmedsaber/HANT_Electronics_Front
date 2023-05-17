@@ -24,13 +24,17 @@ const CategoriesScreen = ({ navigation, route }) => {
       });
   }, []);
   const categoryPressed = (categoryId) => {
+    console.log(route.params.listId)
     navigation.navigate("ComponentsScreen", {
+      token:route.params.token,
       id: categoryId,
       mode: route.params.mode,
       from: "category",
-      listId: route.params.listId,
-    });
-  };
+      listId: route.params.listId
+      
+    })
+  }
+
   const searchHandler = (value) => {
     setSearch(value);
   };

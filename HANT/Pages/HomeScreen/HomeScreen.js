@@ -35,6 +35,7 @@ const HomeScreen = ({ navigation, route }) => {
               onPress={() => navigation.navigate("ComponentsScreen", {
                 token: route.params.token,
                 mode:1
+                
               })}
               title="Components"
             ></Button>
