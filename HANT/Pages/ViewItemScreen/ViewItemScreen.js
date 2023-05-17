@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, Button, TextInput, StyleSheet } from "react-native";
+import config from "../../Config/config";
 
 const ViewItemScreen = ({ navigation, route }) => {
   const [item, setItem] = useState({});
@@ -8,7 +9,7 @@ const ViewItemScreen = ({ navigation, route }) => {
   }
 
   useEffect(() => {
-    fetch("http://192.168.1.102:3000/component/" + route.params.id)
+    fetch(config.BASE_URL + "/component/" + route.params.id)
       .then((res) => res.json())
       .then((result) => {
         setItem(result);

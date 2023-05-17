@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import * as SecureStore from "expo-secure-store";
+import config from "../../Config/config";
+
 import {
   View,
   Text,
@@ -17,7 +19,7 @@ const MyListsScreen = ({ navigation, route }) => {
   const [deleted, setDeleted] = useState(false)
   const [fav,setToFav]=useState(false)
   useEffect(() => {
-    fetch("http://192.168.1.102:3000/list", {
+    fetch(config.BASE_URL + "/list", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -30,7 +32,7 @@ const MyListsScreen = ({ navigation, route }) => {
       });
   }, []);
   useEffect(() => {
-    fetch("http://192.168.1.102:3000/list", {
+    fetch(config.BASE_URL + "/list", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -44,7 +46,8 @@ const MyListsScreen = ({ navigation, route }) => {
       });
   }, [deleted]);
   useEffect(() => {
-    fetch("http://192.168.1.102:3000/list", {
+
+    fetch(config.BASE_URL + "/list", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -65,7 +68,7 @@ const MyListsScreen = ({ navigation, route }) => {
     })
   } 
  const addList=()=>{
-  fetch("http://192.168.1.102:3000/list",{ 
+  fetch(config.BASE_URL + "/list",{
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -81,7 +84,7 @@ const MyListsScreen = ({ navigation, route }) => {
   })
  }
  const deleteList=(id)=>{
-  fetch("http://192.168.1.102:3000/list/user/" + id,{ 
+  fetch(config.BASE_URL + "/list/user/" + id,{
     method: "DELETE",
     headers: {
       "Content-Type": "application/json",
@@ -94,7 +97,7 @@ const MyListsScreen = ({ navigation, route }) => {
     })
  }
 const setfav=(id)=>{
-  fetch("http://192.168.1.102:3000/list/setfav/" + id,{ 
+  fetch(config.BASE_URL + "/list/setfav/" + id,{
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
@@ -107,7 +110,7 @@ const setfav=(id)=>{
     })
 }
 const getFavs=()=>{
-  fetch("http://192.168.1.102:3000/list/get/favs",{ 
+  fetch(config.BASE_URL + "/list/get/favs",{
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -123,7 +126,7 @@ const getFavs=()=>{
   }
   const doneSearch = ()=>{
     if(search.length > 0){
-      fetch("http://192.168.1.102:3000/list/search/" + search, {
+      fetch(config.BASE_URL + "/list/search/" + search, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -135,7 +138,7 @@ const getFavs=()=>{
         SetList(response);
     });
     }else {
-      fetch("http://192.168.1.102:3000/list", {
+      fetch(config.BASE_URL + "/list", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, FlatList, Pressable, TextInput } from "react-native";
 import { Button } from "react-native-elements";
+import config from "../../Config/config";
 
 const ComponentsScreen = ({ route, navigation }) => {
   const [items, setItems] = useState([]);
@@ -8,20 +9,28 @@ const ComponentsScreen = ({ route, navigation }) => {
 
   useEffect(() => {
     if(route.params.from == "category") {
-      fetch("http://192.168.1.102:3000/component/cat/" + route.params.id)
+      fetch(config.BASE_URL + "/component/cat/" + route.params.id)
       .then((res) => res.json())
       .then((response) => {
         setItems(response);
       });
     }else if(route.params.from == "search") {
       if(route.params.search.length > 0){
+<<<<<<< HEAD
         fetch("http://192.168.1.102:3000/component/search/" + route.params.search)
+=======
+        fetch(config.BASE_URL + "/component/search/" + route.params.search)
+>>>>>>> master
         .then((res) => res.json())
         .then((response) => {
           setItems(response);
       });
       }else {
+<<<<<<< HEAD
         fetch("http://192.168.1.102:3000/component/")
+=======
+        fetch(config.BASE_URL + "/component/")
+>>>>>>> master
         .then((res) => res.json())
         .then((response) => {
           setItems(response);
@@ -41,14 +50,22 @@ const ComponentsScreen = ({ route, navigation }) => {
   }
   const doneSearch = ()=>{
     if(search.length > 0){
+<<<<<<< HEAD
       fetch("http://192.168.1.102:3000/component/search/" + search)
+=======
+      fetch(config.BASE_URL + "/component/search/" + search)
+>>>>>>> master
       .then((res) => res.json())
       .then((response) => {
         console.log(response)
         setItems(response);
     });
     }else {
+<<<<<<< HEAD
       fetch("http://192.168.1.102:3000/component/")
+=======
+      fetch(config.BASE_URL + "/component/")
+>>>>>>> master
       .then((res) => res.json())
       .then((response) => {
         setItems(response);
