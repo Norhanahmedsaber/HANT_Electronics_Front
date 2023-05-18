@@ -6,9 +6,11 @@ import config from "../../Config/config";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import EvilIcons from "@expo/vector-icons/EvilIcons";
+import AppLoader from "../AppLoader";
 const LoginScreen = ({ navigation }) => {
   const [UserName, SetUserName] = useState("");
   const [Password, SetPasword] = useState("");
+  const [pending, setPending] = useState(false);
   function UserNameHandler(vaLue) {
     return SetUserName(vaLue);
   }
@@ -16,6 +18,7 @@ const LoginScreen = ({ navigation }) => {
     return SetPasword(vaLue);
   }
   async function login() {
+    setPending(true);
     fetch(config.BASE_URL + "/Signin", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -31,10 +34,12 @@ const LoginScreen = ({ navigation }) => {
       .then(async (response) => {
         if (response.username) {
           await SecureStore.setItemAsync("token", response.token);
+          setPending(false);
           navigation.navigate("HomeScreen", {
             token: response.token,
           });
         } else {
+          setPending(false);
           alert(response.message);
         }
       })
@@ -44,6 +49,7 @@ const LoginScreen = ({ navigation }) => {
   }
 
   async function logInAsGuest() {
+    setPending(true);
     fetch(config.BASE_URL + "/users/guest", {
       method: "POST",
       headers: {
@@ -55,11 +61,13 @@ const LoginScreen = ({ navigation }) => {
       })
       .then(async (response) => {
         if (response.username) {
+          setPending(false);
           await SecureStore.setItemAsync("token", response.token);
           navigation.navigate("HomeScreen", {
             token: response.token,
           });
         } else {
+          setPending(false);
           alert(response.message);
         }
       })
@@ -69,39 +77,45 @@ const LoginScreen = ({ navigation }) => {
   }
 
   return (
-    <View style={styles.PageContainer}>
-      <TextInput
-        style={styles.textInputContainer}
-        placeholder="Username"
-        onChangeText={UserNameHandler}
-      />
-      <TextInput
-        style={styles.textInputContainer}
-        placeholder="Password"
-        onChangeText={PasswordHandler}
-        onSubmitEditing={login}
-      />
-      <View style={styles.SignInContainer}>
-        <Button title="Sign In" onPress={login} />
-      </View>
-      <View style={styles.GuestContainer}>
-        <Button title="Guest" onPress={logInAsGuest}></Button>
-      </View>
-      <View style={styles.SignUpContainer}>
-        <View style={{ paddingLeft: 15 }}>
-          <Text>I dont have an account </Text>
-        </View>
+    <View>
+      {!pending ? (
+        <View style={styles.PageContainer}>
+          <TextInput
+            style={styles.textInputContainer}
+            placeholder="Username"
+            onChangeText={UserNameHandler}
+          />
+          <TextInput
+            style={styles.textInputContainer}
+            placeholder="Password"
+            onChangeText={PasswordHandler}
+            onSubmitEditing={login}
+          />
+          <View style={styles.SignInContainer}>
+            <Button title="Sign In" onPress={login} />
+          </View>
+          <View style={styles.GuestContainer}>
+            <Button title="Guest" onPress={logInAsGuest}></Button>
+          </View>
+          <View style={styles.SignUpContainer}>
+            <View style={{ paddingLeft: 15 }}>
+              <Text>I dont have an account </Text>
+            </View>
 
-        <View style={styles.SignUp}>
-          <Text
-            onPress={() => navigation.navigate("Sign Up")}
-            style={styles.SignUp}
-          >
-            {" "}
-            Sign Up
-          </Text>
+            <View style={styles.SignUp}>
+              <Text
+                onPress={() => navigation.navigate("Sign Up")}
+                style={styles.SignUp}
+              >
+                {" "}
+                Sign Up
+              </Text>
+            </View>
+          </View>
         </View>
-      </View>
+      ) : (
+        <AppLoader />
+      )}
     </View>
   );
 };

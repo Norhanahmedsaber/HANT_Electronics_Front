@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import config from "../../Config/config";
+import AppLoader from "../AppLoader";
 
 import {
   View,
@@ -12,40 +13,48 @@ import {
 
 const StoresScreen = ({ navigation }) => {
   const [stores, SetStores] = useState([]);
+  const [pending, setPending] = useState(false);
   useEffect(() => {
-
+    setPending(true);
     fetch(config.BASE_URL + "/stores")
       .then((res) => res.json())
       .then((response) => {
         SetStores(response);
+        setPending(false);
       });
   }, []);
   return (
     <View>
-      <FlatList
-        data={stores}
-        renderItem={(StoreData) => {
-          return (
-            <View style={styles.listContainer}>
-              <Text style={styles.listTextContainer}>
-                {StoreData.item.name}
-              </Text>
-              <Text style={styles.listTextContainer}>
-                {StoreData.item.location}
-              </Text>
-              <Text style={styles.listTextContainer}>
-                {StoreData.item.img_url}
-              </Text>
-              <Text style={styles.listTextContainer}>
-                {StoreData.item.website}
-              </Text>
-            </View>
-          );
-        }}
-        keyExtractor={(item, index) => {
-          return index;
-        }}
-      />
+      {!pending ? (
+        <View>
+          <FlatList
+            data={stores}
+            renderItem={(StoreData) => {
+              return (
+                <View style={styles.listContainer}>
+                  <Text style={styles.listTextContainer}>
+                    {StoreData.item.name}
+                  </Text>
+                  <Text style={styles.listTextContainer}>
+                    {StoreData.item.location}
+                  </Text>
+                  <Text style={styles.listTextContainer}>
+                    {StoreData.item.img_url}
+                  </Text>
+                  <Text style={styles.listTextContainer}>
+                    {StoreData.item.website}
+                  </Text>
+                </View>
+              );
+            }}
+            keyExtractor={(item, index) => {
+              return index;
+            }}
+          />
+        </View>
+      ) : (
+        <AppLoader />
+      )}
     </View>
   );
 };

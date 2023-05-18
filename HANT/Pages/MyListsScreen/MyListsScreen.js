@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import * as SecureStore from "expo-secure-store";
-import config from "../../Config/config"
+import config from "../../Config/config";
+import AppLoader from "../AppLoader";
 
 import {
   View,
@@ -10,7 +11,7 @@ import {
   StyleSheet,
   FlatList,
   Pressable,
-  Switch
+  Switch,
 } from "react-native";
 
 const MyListsScreen = ({ navigation, route }) => {
@@ -18,23 +19,24 @@ const MyListsScreen = ({ navigation, route }) => {
   const [mode, setMode] = useState(0)
   const [search, setSearch] = useState("");
   const [token, setToken] = useState("");
-  const [deleted, setDeleted] = useState(false)
-  const [fav,setToFav]=useState(false)
-  const [added,settoadded]=useState(false)
+  const [deleted, setDeleted] = useState(false);
+  const [pending, setPending] = useState(false);
+  const [fav, setToFav] = useState(false);
+  const [added, settoadded] = useState(false);
   const [isEnabled, setIsEnabled] = useState(false);
 
   const toggleSwitch = () => {
-    setIsEnabled(previousState => !previousState);
-  }
-  const renderpage=()=>{
-    fetch(config.BASE_URL + "/circuit")
-        .then((res) => res.json())
-        .then((response) => {
-          SetList(response);
-        });
-  }
-  const renderLists  = () => {
-    if(!isEnabled) {
+setIsEnabled(previousState => !previousState);
+}
+const renderpage=()=>{
+  fetch(config.BASE_URL + "/circuit")
+      .then((res) => res.json())
+      .then((response) => {
+        SetList(response);
+      });
+}
+const renderLists  = () => {
+  if(!isEnabled) {
       fetch(config.BASE_URL + "/list", {
         method: "GET",
         headers: {
@@ -45,9 +47,10 @@ const MyListsScreen = ({ navigation, route }) => {
         .then((res) => res.json())
         .then((response) => {
           SetList(response);
+          setPending(false);
         });
-    }else {
-      fetch(config.BASE_URL + "/list/fav", {
+      }else {
+        fetch(config.BASE_URL + "/list/fav", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -57,24 +60,25 @@ const MyListsScreen = ({ navigation, route }) => {
         .then((res) => res.json())
         .then((response) => {
           SetList(response);
+          setPending(false);
         });
     }
-  }
-  useEffect(()=>{
-    renderLists()
-  }, [isEnabled])
-  useEffect(()=>{
-    setMode(route.params.mode)
-
-  })
+    }
+      useEffect(()=>{
+      renderLists()
+    }, [isEnabled])
+      useEffect(()=>{
+      setMode(route.params.mode)
+    })
   useEffect(() => {
   {
-    mode===2&&renderLists()
+    mode===2 &&renderLists()
     mode ===3 && renderpage()
   }
   }, [mode]);
 
   useEffect(() => {
+    setPending(true);
     fetch(config.BASE_URL + "/list", {
       method: "GET",
       headers: {
@@ -85,10 +89,11 @@ const MyListsScreen = ({ navigation, route }) => {
       .then((res) => res.json())
       .then((response) => {
         SetList(response);
-        setToFav(false)
+        setToFav(false);
+        setPending(false);
       });
   }, [fav]);
-  const pressedList=(ListId)=>{
+const pressedList=(ListId)=>{
   if(mode===2){
       navigation.navigate("ListScreen",{
       id:ListId,
@@ -151,65 +156,86 @@ const togglefav=(id)=>{
     })
 }
 
+
+  const getFavs = () => {
+    setPending(true);
+    fetch(config.BASE_URL + "/list/get/favs", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + route.params.token,
+      },
+    })
+      .then((res) => res.json())
+      .then((response) => {
+        setPending(false);
+        SetList(response);
+      });
+  };
   const searchHandler = (value) => {
-    setSearch(value)
-  }
-  const doneSearch = ()=>{
-  if(mode===2){
-    if(search.length > 0){
-      fetch(config.BASE_URL + "/list/search/" + search, {
+    setSearch(value);
+  };
+  const doneSearch = () => {
+    if(mode == 2 ) {
+      if (search.length > 0) {
+        setPending(true);
+        fetch(config.BASE_URL + "/list/search/" + search, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + route.params.token,
+          },
+        })
+          .then((res) => res.json())
+          .then((response) => {
+            setPending(false);
+            SetList(response);
+          });
+      } else {
+        setPending(true);
+        fetch(config.BASE_URL + "/list", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + route.params.token,
+          },
+        })
+          .then((res) => res.json())
+          .then((response) => {
+            setPending(false);
+            SetList(response);
+          });
+      }
+    }
+    else if(mode===3){
+      if(search.length > 0){
+        fetch(config.BASE_URL + "/circuit/search/" + search, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + route.params.token,
+          },
+        })
+        .then((res) => res.json())
+        .then((response) => {
+          SetList(response);
+      });
+      }else {
+        fetch(config.BASE_URL + "/circuit", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
           Authorization: "Bearer " + route.params.token,
         },
       })
-      .then((res) => res.json())
-      .then((response) => {
-        SetList(response);
-    });
-    }else {
-      fetch(config.BASE_URL + "/list", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + route.params.token,
-      },
-    })
-      .then((res) => res.json())
-      .then((response) => {
-        SetList(response);
-      });
+        .then((res) => res.json())
+        .then((response) => {
+          SetList(response);
+        });
+      }
     }
   }
-  else if(mode===3){
-    if(search.length > 0){
-      fetch(config.BASE_URL + "/circuit/search/" + search, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + route.params.token,
-        },
-      })
-      .then((res) => res.json())
-      .then((response) => {
-        SetList(response);
-    });
-    }else {
-      fetch(config.BASE_URL + "/circuit", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + route.params.token,
-      },
-    })
-      .then((res) => res.json())
-      .then((response) => {
-        SetList(response);
-      });
-    }
-  }
-  }
+  
   return (
     <View>
       <View style={{padding:15, flexDirection:"row", justifyContent:"center", alignItems:"center"}}>
@@ -276,7 +302,7 @@ const styles = StyleSheet.create({
   },
   AddButtonContainer: {
     padding: 10,
-    margin:5,
+    margin: 5,
     width: "100%",
   },
   ListsContainer: {
@@ -289,7 +315,7 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   listContainer: {
-    flexDirection:'row',
+    flexDirection: "row",
     margin: 8,
     paddinf: 8,
     borderRadius: 6,
@@ -305,10 +331,10 @@ const styles = StyleSheet.create({
   textInputContainer: {
     borderColor: "grey",
     borderRadius: 10,
-    height:40,
+    height: 40,
     borderWidth: 1,
     width: "90%",
     margin: 5,
-    paddingLeft: 10
+    paddingLeft: 10,
   },
 });

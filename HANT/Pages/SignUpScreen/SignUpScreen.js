@@ -10,10 +10,12 @@ import {
   ScrollView,
   FlatList,
 } from "react-native";
+import AppLoader from "../AppLoader";
 
 const SignUpScreen = ({ navigation }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [pending, setPending] = useState(false);
   const [email, setEmail] = useState("");
 
   const usernameChanged = (value) => {
@@ -30,6 +32,7 @@ const SignUpScreen = ({ navigation }) => {
   };
   const signUpClicked = () => {
     if (valid()) {
+      setPending(true);
       fetch(config.BASE_URL + "/signup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -44,8 +47,10 @@ const SignUpScreen = ({ navigation }) => {
         })
         .then((res) => {
           if (res.Data === "Done") {
+            setPending(false);
             navigation.navigate("Sign In");
           } else {
+            setPending(false);
             alert("Error");
           }
         })
@@ -56,59 +61,65 @@ const SignUpScreen = ({ navigation }) => {
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.pageName}>
-        <Text>Sign Up</Text>
-      </View>
-      <View style={styles.appContainer}>
-        <View style={styles.mailContainer}>
-          <View style={styles.titleMailContainer}>
-            <Text>Mail :</Text>
+    <View>
+      {!pending ? (
+        <View style={styles.container}>
+          <View style={styles.pageName}>
+            <Text>Sign Up</Text>
           </View>
-          <View style={styles.enterMailContainer}>
-            <TextInput
-              style={styles.textInput}
-              placeholder="Enter Your Mail"
-              onChangeText={emailChanged}
-            ></TextInput>
-          </View>
-        </View>
+          <View style={styles.appContainer}>
+            <View style={styles.mailContainer}>
+              <View style={styles.titleMailContainer}>
+                <Text>Mail :</Text>
+              </View>
+              <View style={styles.enterMailContainer}>
+                <TextInput
+                  style={styles.textInput}
+                  placeholder="Enter Your Mail"
+                  onChangeText={emailChanged}
+                ></TextInput>
+              </View>
+            </View>
 
-        <View style={styles.nameContainer}>
-          <View style={styles.titleNameContainer}>
-            <Text>User Name :</Text>
-          </View>
-          <View style={styles.enterNameContainer}>
-            <TextInput
-              style={styles.textInput}
-              placeholder="Enter User Name"
-              onChangeText={usernameChanged}
-            ></TextInput>
-          </View>
-        </View>
+            <View style={styles.nameContainer}>
+              <View style={styles.titleNameContainer}>
+                <Text>User Name :</Text>
+              </View>
+              <View style={styles.enterNameContainer}>
+                <TextInput
+                  style={styles.textInput}
+                  placeholder="Enter User Name"
+                  onChangeText={usernameChanged}
+                ></TextInput>
+              </View>
+            </View>
 
-        <View style={styles.passwordContainer}>
-          <View style={styles.titlePasswordContainer}>
-            <Text>Password :</Text>
-          </View>
-          <View style={styles.enterPasswordContainer}>
-            <TextInput
-              style={styles.textInput}
-              placeholder="Enter Your Password"
-              onChangeText={passwordChanged}
-            ></TextInput>
-          </View>
-        </View>
+            <View style={styles.passwordContainer}>
+              <View style={styles.titlePasswordContainer}>
+                <Text>Password :</Text>
+              </View>
+              <View style={styles.enterPasswordContainer}>
+                <TextInput
+                  style={styles.textInput}
+                  placeholder="Enter Your Password"
+                  onChangeText={passwordChanged}
+                ></TextInput>
+              </View>
+            </View>
 
-        <View style={styles.buttonsContainer}>
-          <View style={styles.cancelButton}>
-            <Button title="Cancel"></Button>
-          </View>
-          <View style={styles.signUpButton}>
-            <Button onPress={signUpClicked} title="Sign Up"></Button>
+            <View style={styles.buttonsContainer}>
+              <View style={styles.cancelButton}>
+                <Button title="Cancel"></Button>
+              </View>
+              <View style={styles.signUpButton}>
+                <Button onPress={signUpClicked} title="Sign Up"></Button>
+              </View>
+            </View>
           </View>
         </View>
-      </View>
+      ) : (
+        <AppLoader />
+      )}
     </View>
   );
 };

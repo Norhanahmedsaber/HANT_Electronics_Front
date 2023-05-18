@@ -1,55 +1,71 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
+
 import { View, Text, Button, TextInput, StyleSheet } from "react-native";
-import * as SecureStore from 'expo-secure-store';
+import * as SecureStore from "expo-secure-store";
 import config from "../../Config/config";
+import AppLoader from "../AppLoader";
 
 const HomeScreen = ({ navigation, route }) => {
-
+  const [pending, setPending] = useState(false);
   return (
-    <View style={styles.container}>
-      <View styles={styles.buttonsContainer}>
-        <View style={styles.buttonsContainer}>
-          <View style={styles.catButton}>
-            <Button
-              onPress={() => navigation.navigate("Components", {
-                token: route.params.token,
-                mode: 1
-              })}
-              title="Components"
-            ></Button>
-          </View>
+    <View>
+      {!pending ? (
+        <View style={styles.container}>
+          <View styles={styles.buttonsContainer}>
+            <View style={styles.buttonsContainer}>
+              <View style={styles.catButton}>
+                <Button
+                  onPress={() =>
+                    navigation.navigate("Components", {
+                      token: route.params.token,
+                      mode: 1,
+                    })
+                  }
+                  title="Components"
+                ></Button>
+              </View>
 
-          <View style={styles.catButton}>
-            <Button
-              onPress={() => navigation.navigate("MyListsScreen", {
-                token: route.params.token,
-                mode:2
-              })}
-              title="My Lists"
-            ></Button>
+              <View style={styles.catButton}>
+                <Button
+                  onPress={() =>
+                    navigation.navigate("MyListsScreen", {
+                      token: route.params.token,
+                      mode: 2,
+                    })
+                  }
+                  title="My Lists"
+                ></Button>
+              </View>
+            </View>
+            <View style={styles.buttonsContainer}>
+              <View style={styles.catButton}>
+                <Button
+                  onPress={() =>
+                    navigation.navigate("MyListsScreen", {
+                      token: route.params.token,
+                      mode: 3,
+                    })
+                  }
+                  title="Circuits"
+                ></Button>
+              </View>
+
+              <View style={styles.catButton}>
+                <Button
+                  onPress={() =>
+                    navigation.navigate("StoresScreen", {
+                      token: route.params.token,
+                    })
+                  }
+                  title="Stores"
+                ></Button>
+              </View>
+            </View>
           </View>
         </View>
-        <View style={styles.buttonsContainer}>
-        <View style={styles.catButton}>
-            <Button
-              onPress={() => navigation.navigate("MyListsScreen", {
-                token: route.params.token,
-                mode:3
-              })}
-              title="Circuits"
-            ></Button>
-          </View>
-
-          <View style={styles.catButton}>
-            <Button
-              onPress={() => navigation.navigate("StoresScreen", {
-                token: route.params.token
-              })}
-              title="Stores"
-            ></Button>
-          </View>
-        </View>
-      </View>
+      ) : (
+        <AppLoader />
+      )}
     </View>
   );
 };

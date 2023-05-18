@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import config from "../../Config/config";
+import AppLoader from "../AppLoader";
 
 import {
   View,
@@ -14,26 +15,28 @@ import SearchBar, { ButtonGroup } from "react-native-elements";
 
 const CategoriesScreen = ({ navigation, route }) => {
   const [Categories, SetCategories] = useState([]);
+  const [pending, setPending] = useState(false);
   const [search, setSearch] = useState("");
   const [clicked, setClicked] = useState(false);
   useEffect(() => {
+    setPending(true);
     fetch(config.BASE_URL + "/categories")
       .then((res) => res.json())
       .then((response) => {
         SetCategories(response);
+        setPending(false);
       });
   }, []);
   const categoryPressed = (categoryId) => {
-    console.log(route.params.listId)
+    console.log(route.params.listId);
     navigation.navigate("ComponentsScreen", {
-      token:route.params.token,
+      token: route.params.token,
       id: categoryId,
       mode: route.params.mode,
       from: "category",
-      listId: route.params.listId
-      
-    })
-  }
+      listId: route.params.listId,
+    });
+  };
 
   const searchHandler = (value) => {
     setSearch(value);
@@ -48,57 +51,63 @@ const CategoriesScreen = ({ navigation, route }) => {
     });
   };
   return (
-    <View style={{ paddingT: 0, flexDirection: "column" }}>
-      <View
-        style={{
-          padding: 15,
-          flexDirection: "row",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <TextInput
-          style={styles.textInputContainer}
-          placeholder="Search..."
-          onChangeText={searchHandler}
-          onSubmitEditing={doneSearch}
-        />
-        <Pressable
-          style={{
-            backgroundColor: "cyan",
-            borderRadius: 20,
-            borderWidth: 1,
-            width: 40,
-            height: 40,
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-          onPress={doneSearch}
-        >
-          <Text>S</Text>
-        </Pressable>
-      </View>
-      <FlatList
-        data={Categories}
-        renderItem={(CategoriesData) => {
-          return (
+    <View>
+      {!pending ? (
+        <View style={{ paddingT: 0, flexDirection: "column" }}>
+          <View
+            style={{
+              padding: 15,
+              flexDirection: "row",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <TextInput
+              style={styles.textInputContainer}
+              placeholder="Search..."
+              onChangeText={searchHandler}
+              onSubmitEditing={doneSearch}
+            />
             <Pressable
-              onPress={() => {
-                categoryPressed(CategoriesData.item.id);
+              style={{
+                backgroundColor: "cyan",
+                borderRadius: 20,
+                borderWidth: 1,
+                width: 40,
+                height: 40,
+                justifyContent: "center",
+                alignItems: "center",
               }}
+              onPress={doneSearch}
             >
-              <View style={styles.listContainer}>
-                <Text style={styles.listTextContainer}>
-                  {CategoriesData.item.name}
-                </Text>
-              </View>
+              <Text>S</Text>
             </Pressable>
-          );
-        }}
-        keyExtractor={(item, index) => {
-          return item.id;
-        }}
-      />
+          </View>
+          <FlatList
+            data={Categories}
+            renderItem={(CategoriesData) => {
+              return (
+                <Pressable
+                  onPress={() => {
+                    categoryPressed(CategoriesData.item.id);
+                  }}
+                >
+                  <View style={styles.listContainer}>
+                    <Text style={styles.listTextContainer}>
+                      {CategoriesData.item.name}
+                    </Text>
+                  </View>
+                </Pressable>
+              );
+            }}
+            keyExtractor={(item, index) => {
+              return item.id;
+            }}
+          />
+        </View>
+      ) : (
+        <AppLoader />
+      )}
     </View>
   );
 };
