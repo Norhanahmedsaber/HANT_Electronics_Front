@@ -19,10 +19,9 @@ const ViewItemScreen = ({ navigation, route }) => {
   const [modalVisible1 , setModalVisible1]=useState(false)
   const [modalVisible2, setModalVisible2]=useState(false)
   const [list, SetList] = useState([]);
+  const [stores , setStores]=useState([])
 
-  function itemHandler(item) {
-    return setItem(item);
-  }
+
   useEffect(() => {
     setMode(route.params.mode);
   }, []);
@@ -49,6 +48,22 @@ const ViewItemScreen = ({ navigation, route }) => {
       });
   }, []);
 
+  const scrap =()=>{
+    fetch(config.BASE_URL+"/scrap", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        search:item.name
+      }),
+    })
+    .then((res)=>res.json())
+    .then((response)=>{
+        setStores(response)
+    })
+  }
+    
+  
+  
   const addComponentMode1 = (listId, itemId) => {
     console.log(listId, itemId);
     fetch(config.BASE_URL + "/item/add/" + listId + "/" + itemId, {
@@ -99,7 +114,6 @@ const ViewItemScreen = ({ navigation, route }) => {
             openBrowserAsync(item.datasheet_url);
           }}
         ></Button>
-        <Button title="Stores"></Button>
         {mode == 2 ? (
           <Button
             title="+"
@@ -168,11 +182,22 @@ const ViewItemScreen = ({ navigation, route }) => {
           <View style={styles.centeredView2}>
             <View style={styles.modalView}>
               <Text style={styles.modalText}>Suggested Stores:</Text>
-                <Image style={{width: 60, height: 60 , resizeMode:'stretch'}} source={{uri:'https://en.wikipedia.org/wiki/555_timer_IC#/media/File:Signetics_NE555N.JPG'}}  />
-                <Pressable onPress={()=>{console.log("tt")}}>
-                  <Text>component name</Text>
-                  <Text>prize</Text>
-                </Pressable>
+              <FlatList
+                data={stores}
+                renderItem = {(itemData) => {
+                    return (
+                    <View style={styles.goalItem}>
+                        <Text style={styles.goalText}>{itemData.item.store}</Text>
+                        <Text style={styles.goalText}>{itemData.item.name}</Text>
+                        <Text style={styles.goalText}>{itemData.item.price}</Text>
+                        <Image source={{uri:itemData.item.img, width:150,height:150 }}/>
+                    </View>
+                    );
+                }}
+                keyExtractor={(item, index) => {
+                    return index;
+                }}
+            />
               <Pressable
                 style={[styles.button, styles.buttonClose]}
                 onPress={() => setModalVisible2(!modalVisible2)}>
@@ -183,7 +208,10 @@ const ViewItemScreen = ({ navigation, route }) => {
       </Modal>
       <Pressable
         style={[styles.button, styles.buttonOpen]}
-        onPress={() => setModalVisible2(true)}>
+        onPress={() => {
+          setModalVisible2(true)
+          scrap()
+        }}>
         <Text style={styles.textStyle}>Suggested Stores</Text>
       </Pressable>
       </View>
