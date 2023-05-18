@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, Button, TextInput, StyleSheet , Modal , Pressable  , FlatList} from "react-native";
+import { View, Text, Button, TextInput, StyleSheet , Modal , Pressable  , FlatList , Image} from "react-native";
 import config from "../../Config/config";
+import ImageModal from 'react-native-image-modal';
 
 const ViewItemScreen = ({ navigation, route }) => {
   const [item, setItem] = useState({});
   const [mode , setMode]= useState(2);
-  const [modalVisible , setModalVisible]=useState(false)
+  const [modalVisible1 , setModalVisible1]=useState(false)
+  const [modalVisible2, setModalVisible2]=useState(false)
   const [list , SetList]=useState([])
   function itemHandler(item) {
     return setItem(item);
@@ -91,11 +93,11 @@ const pressedList=(ListId)=>{
             <Modal
               animationType="slide"
               transparent={true}
-              visible={modalVisible}
+              visible={modalVisible1}
               onRequestClose={() => {S
-                setModalVisible(!modalVisible);
+                setModalVisible1(!modalVisible1);
               }}>
-              <View style={styles.centeredView}>
+              <View style={styles.centeredView1}>
                 <View style={styles.modalView}>
                   <Text style={styles.modalText}>Choose your List:</Text>
                   <FlatList
@@ -119,7 +121,7 @@ const pressedList=(ListId)=>{
                 />
                   <Pressable
                     style={[styles.button, styles.buttonClose]}
-                    onPress={() => setModalVisible(!modalVisible)}>
+                    onPress={() => setModalVisible1(!modalVisible1)}>
                     <Text style={styles.textStyle}>Done</Text>
                   </Pressable>
                 </View>
@@ -128,12 +130,40 @@ const pressedList=(ListId)=>{
             <Pressable
               style={[styles.button, styles.buttonOpen]}
               onPress={() =>{ 
-                setModalVisible(true)
+                setModalVisible1(true)
               }}>
               <Text style={styles.textStyle}>Add to List</Text>
             </Pressable>
           </View>)
         }
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={modalVisible2}
+          onRequestClose={() => {
+            setModalVisible2(!modalVisible2);
+          }}>
+          <View style={styles.centeredView2}>
+            <View style={styles.modalView}>
+              <Text style={styles.modalText}>Suggested Stores:</Text>
+                <Image style={{width: 60, height: 60 , resizeMode:'stretch'}} source={{uri:'https://en.wikipedia.org/wiki/555_timer_IC#/media/File:Signetics_NE555N.JPG'}}  />
+                <Pressable onPress={()=>{console.log("tt")}}>
+                  <Text>component name</Text>
+                  <Text>prize</Text>
+                </Pressable>
+              <Pressable
+                style={[styles.button, styles.buttonClose]}
+                onPress={() => setModalVisible2(!modalVisible2)}>
+                <Text style={styles.textStyle}>close</Text>
+              </Pressable>
+            </View>
+          </View>
+      </Modal>
+      <Pressable
+        style={[styles.button, styles.buttonOpen]}
+        onPress={() => setModalVisible2(true)}>
+        <Text style={styles.textStyle}>Suggested Stores</Text>
+      </Pressable>
       </View>
     </View>
   );
@@ -141,11 +171,17 @@ const pressedList=(ListId)=>{
 
 export default ViewItemScreen;
 const styles = StyleSheet.create({
-  centeredView: {
+  centeredView1: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 22,
+    marginTop: 20,
+  },
+  centeredView2: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 40,
   },
   modalView: {
     margin: 20,
@@ -193,4 +229,10 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     paddingLeft: 15,
   },
+  Image:{
+    height:50,
+    width:50
+
+
+  }
 });
