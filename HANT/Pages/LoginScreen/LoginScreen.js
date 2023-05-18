@@ -1,7 +1,11 @@
 import React, { useState } from "react";
 import { View, Text, Button, TextInput, StyleSheet } from "react-native";
+import Icon from "react-native-vector-icons/FontAwesome";
 import * as SecureStore from "expo-secure-store";
 import config from "../../Config/config";
+import Ionicons from "@expo/vector-icons/Ionicons";
+import FontAwesome from "@expo/vector-icons/FontAwesome";
+import EvilIcons from "@expo/vector-icons/EvilIcons";
 const LoginScreen = ({ navigation }) => {
   const [UserName, SetUserName] = useState("");
   const [Password, SetPasword] = useState("");
