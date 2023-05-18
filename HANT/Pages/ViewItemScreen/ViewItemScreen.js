@@ -9,6 +9,7 @@ import {
   Modal,
   Pressable,
   FlatList,
+  Image
 } from "react-native";
 import config from "../../Config/config";
 import { openBrowserAsync } from "expo-web-browser";
@@ -16,12 +17,12 @@ import { openBrowserAsync } from "expo-web-browser";
 const ViewItemScreen = ({ navigation, route }) => {
   const [item, setItem] = useState({});
   const [mode, setMode] = useState(2);
-  const [modalVisible, setModalVisible] = useState(false);
   const [pending, setPending] = useState(false);
+  const [modalVisible1 , setModalVisible1]=useState(false)
+  const [modalVisible2, setModalVisible2]=useState(false)
   const [list, SetList] = useState([]);
-  function itemHandler(item) {
-    return setItem(item);
-  }
+  const [stores , setStores]=useState([])
+
   useEffect(() => {
     setMode(route.params.mode);
   }, []);
@@ -29,12 +30,12 @@ const ViewItemScreen = ({ navigation, route }) => {
   useEffect(() => {
     setPending(true);
     fetch(config.BASE_URL + "/list", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + route.params.token,
-      },
-    })
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + route.params.token,
+        },
+      })
       .then((res) => res.json())
       .then((response) => {
         SetList(response);
@@ -52,6 +53,24 @@ const ViewItemScreen = ({ navigation, route }) => {
       });
   }, []);
 
+  const scrap =()=>{
+    setPending(true)
+    fetch(config.BASE_URL+"/scrap", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        search:item.name
+      }),
+    })
+    .then((res)=>res.json())
+    .then((response)=>{
+        setStores(response)
+        setPending(false)
+    })
+  }
+    
+  
+  
   const addComponentMode1 = (listId, itemId) => {
     console.log(listId, itemId);
     setPending(true);
@@ -70,9 +89,8 @@ const ViewItemScreen = ({ navigation, route }) => {
   };
 
   const addComponentMode2 = (itemId) => {
-    console.log(route.params.listId, itemId);
     setPending(true);
-    fetch(config.BASE_URL + "/item/add/" + listId + "/" + itemId, {
+    fetch(config.BASE_URL + "/item/add/" + route.params.listId + "/" + itemId, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -95,8 +113,8 @@ const ViewItemScreen = ({ navigation, route }) => {
   return (
     <View>
       {!pending ? (
-        <View>
           <View>
+              <View>
             <Text>Item Name:{item.name}</Text>
           </View>
           <View>
@@ -109,7 +127,6 @@ const ViewItemScreen = ({ navigation, route }) => {
                 openBrowserAsync(item.datasheet_url);
               }}
             ></Button>
-            <Button title="Stores"></Button>
             {mode == 2 ? (
               <Button
                 title="+"
@@ -122,13 +139,11 @@ const ViewItemScreen = ({ navigation, route }) => {
                 <Modal
                   animationType="slide"
                   transparent={true}
-                  visible={modalVisible}
-                  onRequestClose={() => {
-                    S;
-                    setModalVisible(!modalVisible);
-                  }}
-                >
-                  <View style={styles.centeredView}>
+                  visible={modalVisible1}
+                  onRequestClose={() => {S
+                    setModalVisible1(!modalVisible1);
+                  }}>
+                  <View style={styles.centeredView1}>
                     <View style={styles.modalView}>
                       <Text style={styles.modalText}>Choose your List:</Text>
                       <FlatList
@@ -155,8 +170,7 @@ const ViewItemScreen = ({ navigation, route }) => {
                       />
                       <Pressable
                         style={[styles.button, styles.buttonClose]}
-                        onPress={() => setModalVisible(!modalVisible)}
-                      >
+                        onPress={() => setModalVisible1(!modalVisible1)}>
                         <Text style={styles.textStyle}>Done</Text>
                       </Pressable>
                     </View>
@@ -164,30 +178,78 @@ const ViewItemScreen = ({ navigation, route }) => {
                 </Modal>
                 <Pressable
                   style={[styles.button, styles.buttonOpen]}
-                  onPress={() => {
-                    setModalVisible(true);
-                  }}
-                >
+                  onPress={() =>{ 
+                    setModalVisible1(true)
+                  }}>
                   <Text style={styles.textStyle}>Add to List</Text>
                 </Pressable>
+              </View>)
+            }
+            <Modal
+              animationType="slide"
+              transparent={true}
+              visible={modalVisible2}
+              onRequestClose={() => {
+                setModalVisible2(!modalVisible2);
+              }}>
+              <View style={styles.centeredView2}>
+                <View style={styles.modalView}>
+                  <Text style={styles.modalText}>Suggested Stores:</Text>
+                  <FlatList
+                    data={stores}
+                    renderItem = {(itemData) => {
+                        return (
+                        <View style={styles.goalItem}>
+                            <Text style={styles.goalText}>{itemData.item.store}</Text>
+                            <Text style={styles.goalText}>{itemData.item.name}</Text>
+                            <Text style={styles.goalText}>{itemData.item.price}</Text>
+                            <Image source={{uri:itemData.item.img, width:150,height:150 }}/>
+                        </View>
+                        );
+                    }}
+                    keyExtractor={(item, index) => {
+                        return index;
+                    }}
+                />
+                  <Pressable
+                    style={[styles.button, styles.buttonClose]}
+                    onPress={() => setModalVisible2(!modalVisible2)}>
+                    <Text style={styles.textStyle}>close</Text>
+                  </Pressable>
+                </View>
               </View>
-            )}
+          </Modal>
+          <Pressable
+            style={[styles.button, styles.buttonOpen]}
+            onPress={() => {
+              setModalVisible2(true)
+              scrap()
+            }}>
+            <Text style={styles.textStyle}>Suggested Stores</Text>
+          </Pressable>
           </View>
         </View>
       ) : (
         <AppLoader />
       )}
+      
     </View>
   );
 };
 
 export default ViewItemScreen;
 const styles = StyleSheet.create({
-  centeredView: {
+  centeredView1: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: 22,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 20,
+  },
+  centeredView2: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 40,
   },
   modalView: {
     margin: 20,
@@ -235,4 +297,10 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     paddingLeft: 15,
   },
+  Image:{
+    height:50,
+    width:50
+
+
+  }
 });

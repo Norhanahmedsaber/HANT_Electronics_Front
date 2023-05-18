@@ -43,6 +43,7 @@ const CategoriesScreen = ({ navigation, route }) => {
   };
   const doneSearch = () => {
     navigation.navigate("ComponentsScreen", {
+      token:route.params.token,
       search: search,
       mode: route.params.mode,
       from: "search",
