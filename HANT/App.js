@@ -1,6 +1,10 @@
 import * as React from "react";
 import { NavigationContainer } from "@react-navigation/native";
-import { Button } from "react-native";
+import { Button, View, TouchableHighlight } from "react-native";
+import Ionicons from "@expo/vector-icons/Ionicons";
+import FontAwesome from "@expo/vector-icons/FontAwesome";
+import EvilIcons from "@expo/vector-icons/EvilIcons";
+
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import LoginScreen from "./Pages/LoginScreen/LoginScreen";
 import SignUpScreen from "./Pages/SignUpScreen/SignUpScreen";
@@ -31,13 +35,17 @@ export default function App() {
           options={({ navigation }) => ({
             headerBackVisible: false,
             headerRight: () => (
-              <Button
-                onPress={() => {
-                  navigation.navigate("Sign In");
-                }}
-                title="Log Out"
-                color="red"
-              />
+              <View>
+                <TouchableHighlight
+                  onPress={() => {
+                    navigation.navigate("Sign In");
+                  }}
+                >
+                  <View>
+                    <Ionicons name="log-out-outline" size={30}></Ionicons>
+                  </View>
+                </TouchableHighlight>
+              </View>
             ),
           })}
         />
