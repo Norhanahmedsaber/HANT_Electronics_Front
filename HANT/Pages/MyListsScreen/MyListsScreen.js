@@ -24,6 +24,19 @@ const MyListsScreen = ({ navigation, route }) => {
   const toggleSwitch = () => {
     setIsEnabled(previousState => !previousState);
   }
+  const renderpage=()=>{
+    fetch(config.BASE_URL + "/circuit", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + route.params.token,
+        },
+      })
+        .then((res) => res.json())
+        .then((response) => {
+          SetList(response);
+        });
+  }
   const renderLists  = () => {
     if(!isEnabled) {
       fetch(config.BASE_URL + "/list", {
@@ -55,7 +68,7 @@ const MyListsScreen = ({ navigation, route }) => {
     renderLists()
   }, [isEnabled])
   useEffect(() => {
-    renderLists();
+   {mode===3?renderLists():renderpage()}
   }, []);
 
   useEffect(() => {
@@ -73,13 +86,23 @@ const MyListsScreen = ({ navigation, route }) => {
       });
   }, [fav]);
   const pressedList=(ListId)=>{
-    navigation.navigate("ListScreen",{
+  if(mode===2){
+      navigation.navigate("ListScreen",{
       id:ListId,
       token: route.params.token,
       mode:2
     })
+  }
+  else if(mode===3){
+    navigation.navigate("ListScreen",{
+      id:ListId,
+      token: route.params.token,
+      mode:3
+    })
+  }
   } 
  const addList=()=>{
+  if(mode===2){
   fetch(config.BASE_URL + "/list",{ 
     method: "POST",
     headers: {
@@ -94,7 +117,24 @@ const MyListsScreen = ({ navigation, route }) => {
       id:id,
       token: route.params.token,
     })
-  })
+  })}
+  else if(mode===3) {
+    fetch(config.BASE_URL + "/circuit",{ 
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + route.params.token,
+      },})
+    .then((res)=>res.json())
+    .then((response)=>{
+      const id = response.id;
+      renderLists()
+      navigation.navigate("ListScreen",{
+        id:id,
+        token: route.params.token,
+      })
+    })
+  }
  }
  const deleteList=(id)=>{
   fetch(config.BASE_URL + "/list/" + id,{ 
@@ -129,6 +169,7 @@ const togglefav=(id)=>{
     setSearch(value)
   }
   const doneSearch = ()=>{
+  if(mode===2){
     if(search.length > 0){
       fetch(config.BASE_URL + "/list/search/" + search, {
         method: "GET",
@@ -155,6 +196,34 @@ const togglefav=(id)=>{
       });
     }
   }
+  else if(mode===3){
+    if(search.length > 0){
+      fetch(config.BASE_URL + "/circuit/search/" + search, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + route.params.token,
+        },
+      })
+      .then((res) => res.json())
+      .then((response) => {
+        SetList(response);
+    });
+    }else {
+      fetch(config.BASE_URL + "/circuit", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + route.params.token,
+      },
+    })
+      .then((res) => res.json())
+      .then((response) => {
+        SetList(response);
+      });
+    }
+  }
+  }
   return (
     <View>
       <View style={{padding:15, flexDirection:"row", justifyContent:"center", alignItems:"center"}}>
@@ -175,18 +244,18 @@ const togglefav=(id)=>{
         data={list}
         renderItem={(ListData) => {
           return (
-            <View >
+            <View>
               <Pressable onPress ={()=>{
                 pressedList(ListData.item.id)
               }}>
-                  <View style={styles.listContainer} >
+                 {mode===2?(<View style={styles.listContainer} >
                     <Text style={styles.listTextContainer}>{ListData.item.name}</Text>
                     <View style = {{flexDirection: "row"}}>
                       <Button title="D" onPress={()=> {deleteList(ListData.item.id)}}></Button>
                       <Button title="E" onPress={()=> {pressedList(ListData.item.id)}}></Button>
                       <Button title="F" onPress={()=> {togglefav(ListData.item.id)}}></Button>
                     </View>
-                  </View>
+                  </View>):<View></View>}
               </Pressable>
             </View>
           );
@@ -199,8 +268,8 @@ const togglefav=(id)=>{
       <Button title="add" onPress={addList}></Button>
       </View>
       <View style={styles.AddButtonContainer}>
-      <Switch title="favs"   onValueChange={toggleSwitch}
-      value={isEnabled}></Switch>
+    {mode===2?(<Switch title="favs"   onValueChange={toggleSwitch}
+      value={isEnabled}></Switch>):(<View></View>)}
       </View>
     </View>
   );

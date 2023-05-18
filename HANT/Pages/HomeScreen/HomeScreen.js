@@ -32,12 +32,11 @@ const HomeScreen = ({ navigation, route }) => {
         <View style={styles.buttonsContainer}>
           <View style={styles.catButton}>
             <Button
-              onPress={() => navigation.navigate("ComponentsScreen", {
+              onPress={() => navigation.navigate("MylistsScreen", {
                 token: route.params.token,
-                mode:1
-                
+                mode:3
               })}
-              title="Components"
+              title="Circuits"
             ></Button>
           </View>
 
@@ -73,6 +72,7 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     height: 150,
     width: 100,
+
     justifyContent: "center",
     marginTop: 20,
     marginBottom: 20,
