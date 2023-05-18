@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import * as SecureStore from "expo-secure-store";
-import config from "../../Config/config"
+import config from "../../Config/config";
+import AppLoader from "../AppLoader";
 
 import {
   View,
@@ -10,22 +11,24 @@ import {
   StyleSheet,
   FlatList,
   Pressable,
-  Switch
+  Switch,
 } from "react-native";
 
 const MyListsScreen = ({ navigation, route }) => {
   const [list, SetList] = useState([]);
   const [search, setSearch] = useState("");
   const [token, setToken] = useState("");
-  const [deleted, setDeleted] = useState(false)
-  const [fav,setToFav]=useState(false)
-  const [added,settoadded]=useState(false)
+  const [deleted, setDeleted] = useState(false);
+  const [pending, setPending] = useState(false);
+  const [fav, setToFav] = useState(false);
+  const [added, settoadded] = useState(false);
   const [isEnabled, setIsEnabled] = useState(false);
   const toggleSwitch = () => {
-    setIsEnabled(previousState => !previousState);
-  }
-  const renderLists  = () => {
-    if(!isEnabled) {
+    setIsEnabled((previousState) => !previousState);
+  };
+  const renderLists = () => {
+    if (!isEnabled) {
+      setPending(true);
       fetch(config.BASE_URL + "/list", {
         method: "GET",
         headers: {
@@ -36,8 +39,10 @@ const MyListsScreen = ({ navigation, route }) => {
         .then((res) => res.json())
         .then((response) => {
           SetList(response);
+          setPending(false);
         });
-    }else {
+    } else {
+      setPending(true);
       fetch(config.BASE_URL + "/list/get/favs", {
         method: "GET",
         headers: {
@@ -48,17 +53,19 @@ const MyListsScreen = ({ navigation, route }) => {
         .then((res) => res.json())
         .then((response) => {
           SetList(response);
+          setPending(false);
         });
     }
-  }
-  useEffect(()=>{
-    renderLists()
-  }, [isEnabled])
+  };
+  useEffect(() => {
+    renderLists();
+  }, [isEnabled]);
   useEffect(() => {
     renderLists();
   }, []);
 
   useEffect(() => {
+    setPending(true);
     fetch(config.BASE_URL + "/list", {
       method: "GET",
       headers: {
@@ -69,90 +76,75 @@ const MyListsScreen = ({ navigation, route }) => {
       .then((res) => res.json())
       .then((response) => {
         SetList(response);
-        setToFav(false)
+        setToFav(false);
+        setPending(false);
       });
   }, [fav]);
-  const pressedList=(ListId)=>{
-
-    navigation.navigate("ListScreen",{
-      id:ListId,
-      token: route.params.token
+  const pressedList = (ListId) => {
+    navigation.navigate("ListScreen", {
+      id: ListId,
+      token: route.params.token,
+    });
+  };
+  const addList = () => {
+    setPending(true);
+    fetch(config.BASE_URL + "/list", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + route.params.token,
+      },
     })
-  } 
- const addList=()=>{
-  fetch(config.BASE_URL + "/list",{ 
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: "Bearer " + route.params.token,
-    },})
-  .then((res)=>res.json())
-  .then((response)=>{
-    const id = response.id;
-    renderLists()
-    navigation.navigate("ListScreen",{
-      id:id,
-      token: route.params.token
-    })
-  })
- }
- const deleteList=(id)=>{
-  fetch(config.BASE_URL + "/list/user/" + id,{ 
-    method: "DELETE",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: "Bearer " + route.params.token,
-    },})  .then((res)=>res.json())
-    .then((response)=>{
-      if(response.message === "deleted") {
-        setDeleted(true);
-      }
-      renderLists()
-    })
- }
-const togglefav=(id)=>{
-  fetch(config.BASE_URL + "/list/setfav/" + id,{
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: "Bearer " + route.params.token,
-    },})  .then((res)=>res.json())
-    .then((response)=>{
-      if(response.message === "Added to fav") {
-        setToFav(true);
-      }
-      renderLists();
-    })
-}
-const getFavs=()=>{
-  fetch(config.BASE_URL + "/list/get/favs",{ 
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: "Bearer " + route.params.token,
-    },})  .then((res)=>res.json())
-    .then((response)=>{
-      SetList(response);
-    })
-}
-  const searchHandler = (value) => {
-    setSearch(value)
-  }
-  const doneSearch = ()=>{
-    if(search.length > 0){
-      fetch(config.BASE_URL + "/list/search/" + search, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + route.params.token,
-        },
-      })
       .then((res) => res.json())
       .then((response) => {
-        SetList(response);
-    });
-    }else {
-      fetch(config.BASE_URL + "/list", {
+        const id = response.id;
+        setPending(false);
+        renderLists();
+        navigation.navigate("ListScreen", {
+          id: id,
+          token: route.params.token,
+        });
+      });
+  };
+  const deleteList = (id) => {
+    setPending(true);
+    fetch(config.BASE_URL + "/list/user/" + id, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + route.params.token,
+      },
+    })
+      .then((res) => res.json())
+      .then((response) => {
+        setPending(false);
+        if (response.message === "deleted") {
+          setDeleted(true);
+        }
+        renderLists();
+      });
+  };
+  const togglefav = (id) => {
+    setPending(true);
+    fetch(config.BASE_URL + "/list/setfav/" + id, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + route.params.token,
+      },
+    })
+      .then((res) => res.json())
+      .then((response) => {
+        setPending(false);
+        if (response.message === "Added to fav") {
+          setToFav(true);
+        }
+        renderLists();
+      });
+  };
+  const getFavs = () => {
+    setPending(true);
+    fetch(config.BASE_URL + "/list/get/favs", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -161,57 +153,134 @@ const getFavs=()=>{
     })
       .then((res) => res.json())
       .then((response) => {
+        setPending(false);
         SetList(response);
       });
+  };
+  const searchHandler = (value) => {
+    setSearch(value);
+  };
+  const doneSearch = () => {
+    if (search.length > 0) {
+      setPending(true);
+      fetch(config.BASE_URL + "/list/search/" + search, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + route.params.token,
+        },
+      })
+        .then((res) => res.json())
+        .then((response) => {
+          setPending(false);
+          SetList(response);
+        });
+    } else {
+      setPending(true);
+      fetch(config.BASE_URL + "/list", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + route.params.token,
+        },
+      })
+        .then((res) => res.json())
+        .then((response) => {
+          setPending(false);
+          SetList(response);
+        });
     }
-  }
+  };
   return (
     <View>
-      <View style={{padding:15, flexDirection:"row", justifyContent:"center", alignItems:"center"}}>
-        <TextInput
-          style={styles.textInputContainer}
-          placeholder="Search..."
-          onChangeText={searchHandler}
-          onSubmitEditing={doneSearch}
-        />
-        <Pressable 
-          style={{backgroundColor:"cyan",borderRadius:20, borderWidth:1, width:40, height:40, justifyContent:"center", alignItems:"center"}}
-          onPress={doneSearch}
-        >
-          <Text>S</Text>
-        </Pressable>
-      </View>
-      <FlatList
-        data={list}
-        renderItem={(ListData) => {
-          return (
-            <View >
-              <Pressable onPress ={()=>{
-                pressedList(ListData.item.id)
-              }}>
-                  <View style={styles.listContainer} >
-                    <Text style={styles.listTextContainer}>{ListData.item.name}</Text>
-                    <View style = {{flexDirection: "row"}}>
-                      <Button title="D" onPress={()=> {deleteList(ListData.item.id)}}></Button>
-                      <Button title="E" onPress={()=> {pressedList(ListData.item.id)}}></Button>
-                      <Button title="F" onPress={()=> {setfav(ListData.item.id)}}></Button>
+      {!pending ? (
+        <View>
+          <View
+            style={{
+              padding: 15,
+              flexDirection: "row",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <TextInput
+              style={styles.textInputContainer}
+              placeholder="Search..."
+              onChangeText={searchHandler}
+              onSubmitEditing={doneSearch}
+            />
+            <Pressable
+              style={{
+                backgroundColor: "cyan",
+                borderRadius: 20,
+                borderWidth: 1,
+                width: 40,
+                height: 40,
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+              onPress={doneSearch}
+            >
+              <Text>S</Text>
+            </Pressable>
+          </View>
+          <FlatList
+            data={list}
+            renderItem={(ListData) => {
+              return (
+                <View>
+                  <Pressable
+                    onPress={() => {
+                      pressedList(ListData.item.id);
+                    }}
+                  >
+                    <View style={styles.listContainer}>
+                      <Text style={styles.listTextContainer}>
+                        {ListData.item.name}
+                      </Text>
+                      <View style={{ flexDirection: "row" }}>
+                        <Button
+                          title="D"
+                          onPress={() => {
+                            deleteList(ListData.item.id);
+                          }}
+                        ></Button>
+                        <Button
+                          title="E"
+                          onPress={() => {
+                            pressedList(ListData.item.id);
+                          }}
+                        ></Button>
+                        <Button
+                          title="F"
+                          onPress={() => {
+                            setfav(ListData.item.id);
+                          }}
+                        ></Button>
+                      </View>
                     </View>
-                  </View>
-              </Pressable>
-            </View>
-          );
-        }}
-        keyExtractor={(item, index) => {
-          return item.id;
-        }}
-      />
-      <View style={styles.AddButtonContainer}>
-      <Button title="add" onPress={addList}></Button>
-      </View>
-      <View style={styles.AddButtonContainer}>
-      <Switch title="favs"   onValueChange={toggleSwitch}
-      value={isEnabled}></Switch>
-      </View>
+                  </Pressable>
+                </View>
+              );
+            }}
+            keyExtractor={(item, index) => {
+              return item.id;
+            }}
+          />
+          <View style={styles.AddButtonContainer}>
+            <Button title="add" onPress={addList}></Button>
+          </View>
+          <View style={styles.AddButtonContainer}>
+            <Switch
+              title="favs"
+              onValueChange={toggleSwitch}
+              value={isEnabled}
+            ></Switch>
+          </View>
+        </View>
+      ) : (
+        <AppLoader />
+      )}
     </View>
   );
 };
@@ -227,7 +296,7 @@ const styles = StyleSheet.create({
   },
   AddButtonContainer: {
     padding: 10,
-    margin:5,
+    margin: 5,
     width: "100%",
   },
   ListsContainer: {
@@ -240,7 +309,7 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   listContainer: {
-    flexDirection:'row',
+    flexDirection: "row",
     margin: 8,
     paddinf: 8,
     borderRadius: 6,
@@ -256,10 +325,10 @@ const styles = StyleSheet.create({
   textInputContainer: {
     borderColor: "grey",
     borderRadius: 10,
-    height:40,
+    height: 40,
     borderWidth: 1,
     width: "90%",
     margin: 5,
-    paddingLeft: 10
+    paddingLeft: 10,
   },
 });

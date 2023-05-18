@@ -1,134 +1,175 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, FlatList, Pressable, TextInput } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  FlatList,
+  Pressable,
+  TextInput,
+} from "react-native";
 import { Button } from "react-native-elements";
 import config from "../../Config/config";
-
+import AppLoader from "../AppLoader";
 
 const ComponentsScreen = ({ route, navigation }) => {
   const [items, setItems] = useState([]);
-    const [search, setSearch] = useState("");
-    const [mode , setMode] = useState(1)
-   
-  useEffect(()=>{
-    setMode(route.params.mode)
-  },[])
-  const renderComponent=()=>{
+  const [search, setSearch] = useState("");
+  const [pending, setPending] = useState(false);
+  const [mode, setMode] = useState(1);
 
-    if(route.params.from == "category") {
+  useEffect(() => {
+    setMode(route.params.mode);
+  }, []);
+  const renderComponent = () => {
+    if (route.params.from == "category") {
+      setPending(true);
       fetch(config.BASE_URL + "/component/cat/" + route.params.id)
-      .then((res) => res.json())
-      .then((response) => {
-        setItems(response);
-      });
-    }else if(route.params.from == "search") {
-      if(route.params.search.length > 0){
+        .then((res) => res.json())
+        .then((response) => {
+          setItems(response);
+          setPending(false);
+        });
+    } else if (route.params.from == "search") {
+      if (route.params.search.length > 0) {
+        setPending(true);
         fetch(config.BASE_URL + "/component/search/" + route.params.search)
-        .then((res) => res.json())
-        .then((response) => {
-          setItems(response);
-      });
-      }else {
-
+          .then((res) => res.json())
+          .then((response) => {
+            setItems(response);
+            setPending(false);
+          });
+      } else {
+        setPending(true);
         fetch(config.BASE_URL + "/component/")
-        .then((res) => res.json())
-        .then((response) => {
-          setItems(response);
-          console.log(response)
-      });
+          .then((res) => res.json())
+          .then((response) => {
+            setItems(response);
+            setPending(false);
+          });
       }
-      
     }
-}
+  };
 
   useEffect(() => {
     renderComponent();
   }, []);
   const componenetPressed = (componentId) => {
     navigation.navigate("ViewItemScreen", {
-      token:route.params.token,
+      token: route.params.token,
       id: componentId,
-      listId:route.params.listId,
-      mode:route.params.mode
+      listId: route.params.listId,
+      mode: route.params.mode,
     });
   };
   const searchHandler = (value) => {
-    setSearch(value)
-  }
-  const doneSearch = ()=>{
-    if(search.length > 0){
+    setSearch(value);
+  };
+  const doneSearch = () => {
+    if (search.length > 0) {
+      setPending(true);
       fetch(config.BASE_URL + "/component/search/" + search)
-      .then((res) => res.json())
-      .then((response) => {
-        console.log(response)
-        setItems(response);
-    });
-    }else {
+        .then((res) => res.json())
+        .then((response) => {
+          setItems(response);
+          setPending(false);
+        });
+    } else {
+      setPending(true);
       fetch(config.BASE_URL + "/component/")
+        .then((res) => res.json())
+        .then((response) => {
+          setItems(response);
+          setPending(false);
+        });
+    }
+  };
+
+  const addComponent = (itemId) => {
+    setPending(true);
+    fetch(config.BASE_URL + "/item/add/" + route.params.listId + "/" + itemId, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + route.params.token,
+      },
+    })
       .then((res) => res.json())
       .then((response) => {
-        setItems(response);
-    });
-    }
-
-  }
-  
-  const addComponent = (itemId)=>{
-    fetch(config.BASE_URL + "/item/add/" + route.params.listId + "/" + itemId , {
-      method:"POST",
-      headers:{
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + route.params.token
-      }})
-    .then((res)=>res.json())
-    .then((response)=>{
-      alert(response.message)
-      renderComponent();
-    })
-}
+        alert(response.message);
+        renderComponent();
+        setPending(false);
+      });
+  };
   return (
-    <View style={styles.appContainer}>
-      <View style={{padding:15, flexDirection:"row", justifyContent:"center", alignItems:"center"}}>
-        <TextInput
-          style={styles.textInputContainer}
-          placeholder="Search..."
-          onChangeText={searchHandler}
-          onSubmitEditing={doneSearch}
-        />
-        <Pressable 
-          style={{backgroundColor:"cyan",borderRadius:20, borderWidth:1, width:40, height:40, justifyContent:"center", alignItems:"center"}}
-          onPress={doneSearch}
-        >
-          <Text>S</Text>
-        </Pressable>
-      </View>
-      <FlatList
-        data={items}
-        renderItem={(itemData) => {
-          return (
+    <View>
+      {!pending ? (
+        <View style={styles.appContainer}>
+          <View
+            style={{
+              padding: 15,
+              flexDirection: "row",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <TextInput
+              style={styles.textInputContainer}
+              placeholder="Search..."
+              onChangeText={searchHandler}
+              onSubmitEditing={doneSearch}
+            />
             <Pressable
-              onPress={() => {
-                componenetPressed(itemData.item.id);
+              style={{
+                backgroundColor: "cyan",
+                borderRadius: 20,
+                borderWidth: 1,
+                width: 40,
+                height: 40,
+                justifyContent: "center",
+                alignItems: "center",
               }}
+              onPress={doneSearch}
             >
-              <View style={styles.listContainer}>
-                <Text style={styles.listTextContainer}>{itemData.item.name}</Text>
-                <View>
-                
-                
-                {mode==2?(<Button title="+" onPress={()=>{
-                  addComponent(itemData.item.id)
-                }}>
-              </Button>):(<View></View>)}
-              </View>
-              </View>
-              </Pressable>
-          );
-        }}
-        keyExtractor={(item, index) => {
-          return item.id;
-        }}
-      />
-     
+              <Text>S</Text>
+            </Pressable>
+          </View>
+          <FlatList
+            data={items}
+            renderItem={(itemData) => {
+              return (
+                <Pressable
+                  onPress={() => {
+                    componenetPressed(itemData.item.id);
+                  }}
+                >
+                  <View style={styles.listContainer}>
+                    <Text style={styles.listTextContainer}>
+                      {itemData.item.name}
+                    </Text>
+                    <View>
+                      {mode == 2 ? (
+                        <Button
+                          title="+"
+                          onPress={() => {
+                            addComponent(itemData.item.id);
+                          }}
+                        ></Button>
+                      ) : (
+                        <View></View>
+                      )}
+                    </View>
+                  </View>
+                </Pressable>
+              );
+            }}
+            keyExtractor={(item, index) => {
+              return item.id;
+            }}
+          />
+        </View>
+      ) : (
+        <AppLoader />
+      )}
     </View>
   );
 };
@@ -192,14 +233,14 @@ const styles = StyleSheet.create({
   textInputContainer: {
     borderColor: "grey",
     borderRadius: 10,
-    height:40,
+    height: 40,
     borderWidth: 1,
     width: "90%",
     margin: 5,
-    paddingLeft: 10
+    paddingLeft: 10,
   },
   listContainer: {
-    flexDirection:'row',
+    flexDirection: "row",
     margin: 8,
     paddinf: 8,
     borderRadius: 6,
