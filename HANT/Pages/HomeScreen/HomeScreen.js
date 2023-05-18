@@ -30,9 +30,9 @@ const HomeScreen = ({ navigation, route }) => {
           </View>
         </View>
         <View style={styles.buttonsContainer}>
-          <View style={styles.catButton}>
+        <View style={styles.catButton}>
             <Button
-              onPress={() => navigation.navigate("MylistsScreen", {
+              onPress={() => navigation.navigate("MyListsScreen", {
                 token: route.params.token,
                 mode:3
               })}

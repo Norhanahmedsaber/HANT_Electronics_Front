@@ -10,6 +10,7 @@ const ListScreen = ({ route, navigation }) => {
   const noteHandler = (value) => setNote(value)
 
   useEffect(() => {
+    console.log(route.params.id)
     fetch(config.BASE_URL + "/circuit/" + route.params.id, {
       method: "GET",
       headers: {
@@ -69,7 +70,22 @@ const ListScreen = ({ route, navigation }) => {
       mode:route.params.mode
     });
   };
-
+  const copy = () => {
+    fetch(config.BASE_URL + "/list/copy/" + route.params.id,{
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + route.params.token,
+      },
+    }).then((res) => res.json())
+    .then ((result) => {
+      alert(result.message)
+    })
+    navigation.navigate("MyListsScreen",{
+      token:route.params.token,
+      mode:2,
+    })
+  }
   return (
     <View style={styles.appContainer}>
       <View>
@@ -115,11 +131,19 @@ const ListScreen = ({ route, navigation }) => {
           return item.id;
         }}
       />
-      <View>
+      {route.params.mode == 2? (
+        <View>
         <Button title="Add to List" onPress={()=>{
           addItem();
         }}></Button>
       </View>
+      ) : (
+        <View>
+        <Button title="Copy to My Lists" onPress={()=>{
+          copy();
+        }}></Button>
+      </View>
+      )}
     </View>
   );
 };

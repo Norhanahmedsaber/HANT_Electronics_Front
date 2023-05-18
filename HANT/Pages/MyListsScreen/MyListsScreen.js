@@ -15,23 +15,19 @@ import {
 
 const MyListsScreen = ({ navigation, route }) => {
   const [list, SetList] = useState([]);
+  const [mode, setMode] = useState(0)
   const [search, setSearch] = useState("");
   const [token, setToken] = useState("");
   const [deleted, setDeleted] = useState(false)
   const [fav,setToFav]=useState(false)
   const [added,settoadded]=useState(false)
   const [isEnabled, setIsEnabled] = useState(false);
+
   const toggleSwitch = () => {
     setIsEnabled(previousState => !previousState);
   }
   const renderpage=()=>{
-    fetch(config.BASE_URL + "/circuit", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + route.params.token,
-        },
-      })
+    fetch(config.BASE_URL + "/circuit")
         .then((res) => res.json())
         .then((response) => {
           SetList(response);
@@ -67,9 +63,16 @@ const MyListsScreen = ({ navigation, route }) => {
   useEffect(()=>{
     renderLists()
   }, [isEnabled])
+  useEffect(()=>{
+    setMode(route.params.mode)
+
+  })
   useEffect(() => {
-   {mode===3?renderLists():renderpage()}
-  }, []);
+  {
+    mode===2&&renderLists()
+    mode ===3 && renderpage()
+  }
+  }, [mode]);
 
   useEffect(() => {
     fetch(config.BASE_URL + "/list", {
@@ -103,7 +106,7 @@ const MyListsScreen = ({ navigation, route }) => {
   } 
  const addList=()=>{
   if(mode===2){
-  fetch(config.BASE_URL + "/list",{ 
+  fetch(config.BASE_URL + "/list",{
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -118,23 +121,6 @@ const MyListsScreen = ({ navigation, route }) => {
       token: route.params.token,
     })
   })}
-  else if(mode===3) {
-    fetch(config.BASE_URL + "/circuit",{ 
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + route.params.token,
-      },})
-    .then((res)=>res.json())
-    .then((response)=>{
-      const id = response.id;
-      renderLists()
-      navigation.navigate("ListScreen",{
-        id:id,
-        token: route.params.token,
-      })
-    })
-  }
  }
  const deleteList=(id)=>{
   fetch(config.BASE_URL + "/list/" + id,{ 
@@ -248,14 +234,16 @@ const togglefav=(id)=>{
               <Pressable onPress ={()=>{
                 pressedList(ListData.item.id)
               }}>
-                 {mode===2?(<View style={styles.listContainer} >
+                    <View style={styles.listContainer} >
                     <Text style={styles.listTextContainer}>{ListData.item.name}</Text>
-                    <View style = {{flexDirection: "row"}}>
-                      <Button title="D" onPress={()=> {deleteList(ListData.item.id)}}></Button>
-                      <Button title="E" onPress={()=> {pressedList(ListData.item.id)}}></Button>
-                      <Button title="F" onPress={()=> {togglefav(ListData.item.id)}}></Button>
-                    </View>
-                  </View>):<View></View>}
+                      {mode===2?(
+                          <View style = {{flexDirection: "row"}}>
+                            <Button title="D" onPress={()=> {deleteList(ListData.item.id)}}></Button>
+                            <Button title="E" onPress={()=> {pressedList(ListData.item.id)}}></Button>
+                            <Button title="F" onPress={()=> {togglefav(ListData.item.id)}}></Button>
+                          </View>
+                        ):<View></View>}
+                  </View>
               </Pressable>
             </View>
           );
@@ -264,9 +252,11 @@ const togglefav=(id)=>{
           return item.id;
         }}
       />
-      <View style={styles.AddButtonContainer}>
-      <Button title="add" onPress={addList}></Button>
-      </View>
+      {mode == 2 && (
+        <View style={styles.AddButtonContainer}>
+        <Button title="add" onPress={addList}></Button>
+        </View>
+      )}
       <View style={styles.AddButtonContainer}>
     {mode===2?(<Switch title="favs"   onValueChange={toggleSwitch}
       value={isEnabled}></Switch>):(<View></View>)}
