@@ -10,7 +10,7 @@ const ListScreen = ({ route, navigation }) => {
   const noteHandler = (value) => setNote(value)
 
   useEffect(() => {
-    fetch(config.BASE_URL + "/list/" + route.params.id, {
+    fetch(config.BASE_URL + "/circuit/" + route.params.id, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

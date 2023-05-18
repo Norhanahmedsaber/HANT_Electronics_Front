@@ -38,7 +38,7 @@ const MyListsScreen = ({ navigation, route }) => {
           SetList(response);
         });
     }else {
-      fetch(config.BASE_URL + "/list/get/favs", {
+      fetch(config.BASE_URL + "/list/fav", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -73,7 +73,6 @@ const MyListsScreen = ({ navigation, route }) => {
       });
   }, [fav]);
   const pressedList=(ListId)=>{
-      console.log(ListId)
     navigation.navigate("ListScreen",{
       id:ListId,
       token: route.params.token,
@@ -98,7 +97,7 @@ const MyListsScreen = ({ navigation, route }) => {
   })
  }
  const deleteList=(id)=>{
-  fetch(config.BASE_URL + "/list/user/" + id,{ 
+  fetch(config.BASE_URL + "/list/" + id,{ 
     method: "DELETE",
     headers: {
       "Content-Type": "application/json",
@@ -112,7 +111,7 @@ const MyListsScreen = ({ navigation, route }) => {
     })
  }
 const togglefav=(id)=>{
-  fetch(config.BASE_URL + "/list/setfav/" + id,{
+  fetch(config.BASE_URL + "/list/fav/" + id,{
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
@@ -125,17 +124,7 @@ const togglefav=(id)=>{
       renderLists();
     })
 }
-const getFavs=()=>{
-  fetch(config.BASE_URL + "/list/get/favs",{ 
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: "Bearer " + route.params.token,
-    },})  .then((res)=>res.json())
-    .then((response)=>{
-      SetList(response);
-    })
-}
+
   const searchHandler = (value) => {
     setSearch(value)
   }
@@ -195,7 +184,7 @@ const getFavs=()=>{
                     <View style = {{flexDirection: "row"}}>
                       <Button title="D" onPress={()=> {deleteList(ListData.item.id)}}></Button>
                       <Button title="E" onPress={()=> {pressedList(ListData.item.id)}}></Button>
-                      <Button title="F" onPress={()=> {setfav(ListData.item.id)}}></Button>
+                      <Button title="F" onPress={()=> {togglefav(ListData.item.id)}}></Button>
                     </View>
                   </View>
               </Pressable>

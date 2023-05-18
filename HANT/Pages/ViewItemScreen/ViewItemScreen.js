@@ -8,6 +8,7 @@ import {
   Modal,
   Pressable,
   FlatList,
+  Image
 } from "react-native";
 import config from "../../Config/config";
 import { openBrowserAsync } from "expo-web-browser";
@@ -28,12 +29,12 @@ const ViewItemScreen = ({ navigation, route }) => {
 
   useEffect(() => {
     fetch(config.BASE_URL + "/list", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + route.params.token,
-      },
-    })
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + route.params.token,
+        },
+      })
       .then((res) => res.json())
       .then((response) => {
         SetList(response);
@@ -64,8 +65,7 @@ const ViewItemScreen = ({ navigation, route }) => {
   };
 
   const addComponentMode2 = (itemId) => {
-    console.log(route.params.listId, itemId);
-    fetch(config.BASE_URL + "/item/add/" + listId + "/" + itemId, {
+    fetch(config.BASE_URL + "/item/add/" + route.params.listId + "/" + itemId, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

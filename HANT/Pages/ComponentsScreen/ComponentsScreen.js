@@ -33,7 +33,6 @@ const ComponentsScreen = ({ route, navigation }) => {
         .then((res) => res.json())
         .then((response) => {
           setItems(response);
-          console.log(response)
       });
       }
       
@@ -45,7 +44,7 @@ const ComponentsScreen = ({ route, navigation }) => {
   }, []);
   const componenetPressed = (componentId) => {
     navigation.navigate("ViewItemScreen", {
-      token:route.params.token,
+      token: route.params.token,
       id: componentId,
       listId:route.params.listId,
       mode:route.params.mode
