@@ -73,10 +73,11 @@ const MyListsScreen = ({ navigation, route }) => {
       });
   }, [fav]);
   const pressedList=(ListId)=>{
-
+      console.log(ListId)
     navigation.navigate("ListScreen",{
       id:ListId,
-      token: route.params.token
+      token: route.params.token,
+      mode:2
     })
   } 
  const addList=()=>{
@@ -92,7 +93,7 @@ const MyListsScreen = ({ navigation, route }) => {
     renderLists()
     navigation.navigate("ListScreen",{
       id:id,
-      token: route.params.token
+      token: route.params.token,
     })
   })
  }

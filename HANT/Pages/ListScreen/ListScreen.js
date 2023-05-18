@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, FlatList , Button, TextInput} from "react-native";
+import { View, Text, StyleSheet, FlatList , Button, TextInput, Pressable} from "react-native";
 import config from "../../Config/config";
 
 const ListScreen = ({ route, navigation }) => {
@@ -61,6 +61,15 @@ const ListScreen = ({ route, navigation }) => {
     })
   }
 
+  const componenetPressed = (componentId) => { 
+    navigation.navigate("ViewItemScreen", {
+      token:route.params.token,
+      id: componentId,
+      listId:route.params.id,
+      mode:route.params.mode
+    });
+  };
+
   return (
     <View style={styles.appContainer}>
       <View>
@@ -83,6 +92,11 @@ const ListScreen = ({ route, navigation }) => {
         data={items}
         renderItem={(itemData) => {
           return (
+            <Pressable
+              onPress={() => {
+                componenetPressed(itemData.item.component_id);
+              }}
+            >
             <View style={styles.goalItem}>
               <View style={styles.ListsContainer}>
                 <Text style={styles.listTextContainer}>{itemData.item.name}</Text>
@@ -93,7 +107,7 @@ const ListScreen = ({ route, navigation }) => {
               </View>
             </View>
             
-
+            </Pressable>       
           );
         }}
 
