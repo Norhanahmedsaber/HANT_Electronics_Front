@@ -81,24 +81,28 @@ const LoginScreen = ({ navigation }) => {
       {!pending ? (
         <View style={styles.PageContainer}>
           <TextInput
-            style={styles.textInputContainer}
-            placeholder="Username"
+            style={styles.InputContainer}
+            placeholder="   Username"
             onChangeText={UserNameHandler}
           />
+          <View style={styles.HorizontalSpace}></View>
           <TextInput
-            style={styles.textInputContainer}
-            placeholder="Password"
+            style={styles.InputContainer}
+            placeholder="   Password"
             onChangeText={PasswordHandler}
             onSubmitEditing={login}
           />
+          <View style={styles.HorizontalSpace}></View>
           <View style={styles.SignInContainer}>
             <Button title="Sign In" onPress={login} />
           </View>
+          <View style={styles.HorizontalSpace}></View>
           <View style={styles.GuestContainer}>
-            <Button title="Guest" onPress={logInAsGuest}></Button>
+            <Button title="Continue as a Guest" onPress={logInAsGuest}></Button>
           </View>
+          <View style={styles.HorizontalSpace}></View>
           <View style={styles.SignUpContainer}>
-            <View style={{ paddingLeft: 15 }}>
+            <View>
               <Text>I dont have an account </Text>
             </View>
 
@@ -124,35 +128,48 @@ export default LoginScreen;
 const styles = StyleSheet.create({
   PageContainer: {
     flexDirection: "column",
+
     justifyContent: "center",
     alignItems: "center",
-    paddingTop: 200,
-    paddingBottom: 5,
+
+    paddingTop: "20%",
+    paddingBottom: "30%",
+    paddingLeft: "10%",
+    paddingRight: "10%",
+
     width: "100%",
+    height: "100%",
   },
+
   SignUp: {
     color: "blue",
   },
+
   SignInContainer: {
-    flexDirection: "column",
-    padding: 10,
     width: "100%",
+    height: "8%",
   },
-  textInputContainer: {
+
+  InputContainer: {
     borderColor: "grey",
-    borderRadius: 6,
+    borderRadius: 0,
     borderWidth: 1,
-    width: "90%",
-    margin: 5,
+    width: "100%",
+    height: "8%",
   },
+
   SignUpContainer: {
     flexDirection: "row",
-    paddingTop: 5,
-    paddingRight: 50,
     width: "100%",
   },
+
   GuestContainer: {
-    padding: 10,
     width: "100%",
+    height: "8%",
+  },
+
+  HorizontalSpace: {
+    width: "100%",
+    height: "5%",
   },
 });

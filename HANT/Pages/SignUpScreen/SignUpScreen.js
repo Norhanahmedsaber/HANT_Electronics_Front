@@ -63,58 +63,53 @@ const SignUpScreen = ({ navigation }) => {
   return (
     <View>
       {!pending ? (
-        <View style={styles.container}>
-          <View style={styles.pageName}>
-            <Text>Sign Up</Text>
+        <View style={styles.PageContainer}>
+          <View style={styles.RowContainer}>
+            <View style={styles.TitleContainer}>
+              <Text>Mail :</Text>
+            </View>
+            <View style={styles.VerticalSpace}></View>
+            <TextInput
+              style={styles.InputContainer}
+              placeholder="   Enter Your Mail"
+              onChangeText={emailChanged}
+            ></TextInput>
           </View>
-          <View style={styles.appContainer}>
-            <View style={styles.mailContainer}>
-              <View style={styles.titleMailContainer}>
-                <Text>Mail :</Text>
-              </View>
-              <View style={styles.enterMailContainer}>
-                <TextInput
-                  style={styles.textInput}
-                  placeholder="Enter Your Mail"
-                  onChangeText={emailChanged}
-                ></TextInput>
-              </View>
+
+          <View style={styles.HorizontalSpace}></View>
+
+          <View style={styles.RowContainer}>
+            <View style={styles.TitleContainer}>
+              <Text>User Name :</Text>
             </View>
 
-            <View style={styles.nameContainer}>
-              <View style={styles.titleNameContainer}>
-                <Text>User Name :</Text>
-              </View>
-              <View style={styles.enterNameContainer}>
-                <TextInput
-                  style={styles.textInput}
-                  placeholder="Enter User Name"
-                  onChangeText={usernameChanged}
-                ></TextInput>
-              </View>
-            </View>
+            <View style={styles.VerticalSpace}></View>
 
-            <View style={styles.passwordContainer}>
-              <View style={styles.titlePasswordContainer}>
-                <Text>Password :</Text>
-              </View>
-              <View style={styles.enterPasswordContainer}>
-                <TextInput
-                  style={styles.textInput}
-                  placeholder="Enter Your Password"
-                  onChangeText={passwordChanged}
-                ></TextInput>
-              </View>
-            </View>
+            <TextInput
+              style={styles.InputContainer}
+              placeholder="   Enter User Name"
+              onChangeText={usernameChanged}
+            ></TextInput>
+          </View>
 
-            <View style={styles.buttonsContainer}>
-              <View style={styles.cancelButton}>
-                <Button title="Cancel"></Button>
-              </View>
-              <View style={styles.signUpButton}>
-                <Button onPress={signUpClicked} title="Sign Up"></Button>
-              </View>
+          <View style={styles.HorizontalSpace}></View>
+
+          <View style={styles.RowContainer}>
+            <View style={styles.TitleContainer}>
+              <Text>Password :</Text>
             </View>
+            <View style={styles.VerticalSpace}></View>
+            <TextInput
+              style={styles.InputContainer}
+              placeholder="   Enter Your Password"
+              onChangeText={passwordChanged}
+            ></TextInput>
+          </View>
+
+          <View style={styles.HorizontalSpace}></View>
+
+          <View style={styles.SignUpButton}>
+            <Button onPress={signUpClicked} title="Sign Up"></Button>
           </View>
         </View>
       ) : (
@@ -125,143 +120,51 @@ const SignUpScreen = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
-  pageName: {
-    padding: 50,
-    paddingLeft: 180,
-    paddingTop: 120,
-    color: "black",
+  PageContainer: {
+    flexDirection: "column",
+
     justifyContent: "center",
-    fontSize: 150,
+    alignItems: "center",
+
+    paddingTop: "10%",
+    paddingBottom: "30%",
+    paddingLeft: "10%",
+    paddingRight: "10%",
+
+    width: "100%",
+    height: "100%",
   },
-  cancelButton: {
-    borderWidth: 1,
-    borderColor: "#cccccc",
-    marginLeft: 10,
-    color: "white",
-    backgroundColor: "yellow",
-    borderRadius: 6,
-    height: 40,
-    width: 100,
-    justifyContent: "center",
-  },
-  signUpButton: {
-    borderWidth: 1,
-    borderColor: "#cccccc",
-    marginLeft: 10,
-    color: "white",
-    backgroundColor: "yellow",
-    borderRadius: 6,
-    height: 40,
-    width: 100,
-    justifyContent: "center",
-  },
-  buttonsContainer: {
+  RowContainer: {
     flexDirection: "row",
+    width: "100%",
+    height: "8%",
+  },
+  TitleContainer: {
+    width: "25%",
     justifyContent: "center",
-    marginTop: 30,
+    height: "100%",
   },
 
-  container: {
-    flexDirection: "column",
-  },
-  nameContainer: {
-    paddingTop: 10,
-    flexDirection: "row",
-  },
-  passwordContainer: {
-    paddingTop: 10,
-    flexDirection: "row",
-  },
-  mailContainer: {
-    paddingTop: 10,
-    flexDirection: "row",
-  },
-  appContainer: {
-    flexDirection: "column",
-  },
-  titleNameContainer: {
+  InputContainer: {
+    borderColor: "grey",
+    borderRadius: 0,
     borderWidth: 1,
-    borderColor: "#cccccc",
-    width: "80%",
-    marginRight: 8,
-    padding: 8,
-    justifyContent: "center",
-    paddingLeft: 10,
-    borderRadius: 6,
-    width: 120,
-    marginLeft: 10,
-    backgroundColor: "#CBB279",
-    height: 40,
+    width: "70%",
+    height: "100%",
   },
-  titlePasswordContainer: {
-    borderWidth: 1,
-    borderColor: "#cccccc",
-    width: "80%",
-    marginRight: 8,
-    padding: 8,
-    justifyContent: "center",
-    paddingLeft: 10,
-    borderRadius: 6,
-    width: 120,
-    marginLeft: 10,
-    backgroundColor: "#CBB279",
-    height: 40,
+
+  SignUpButton: {
+    width: "100%",
+    height: "8%",
   },
-  titleMailContainer: {
-    borderWidth: 1,
-    borderColor: "#cccccc",
-    width: "80%",
-    marginRight: 8,
-    padding: 8,
-    justifyContent: "center",
-    paddingLeft: 10,
-    borderRadius: 6,
-    width: 120,
-    marginLeft: 10,
-    backgroundColor: "#CBB279",
-    height: 40,
+
+  HorizontalSpace: {
+    width: "100%",
+    height: "5%",
   },
-  enterNameContainer: {
-    borderWidth: 1,
-    borderColor: "#cccccc",
-    width: "80%",
-    marginRight: 8,
-    padding: 8,
-    justifyContent: "center",
-    paddingLeft: 15,
-    borderRadius: 6,
-    width: 230,
-    marginLeft: 10,
-    backgroundColor: "#CBB279",
-    height: 40,
-  },
-  enterMailContainer: {
-    borderWidth: 1,
-    borderColor: "#cccccc",
-    width: "80%",
-    marginRight: 8,
-    padding: 8,
-    justifyContent: "center",
-    paddingLeft: 15,
-    borderRadius: 6,
-    width: 230,
-    marginLeft: 10,
-    backgroundColor: "#CBB279",
-    height: 40,
-  },
-  enterPasswordContainer: {
-    borderWidth: 1,
-    borderColor: "#cccccc",
-    width: "80%",
-    marginRight: 8,
-    padding: 8,
-    justifyContent: "center",
-    paddingLeft: 15,
-    borderRadius: 6,
-    width: 230,
-    marginLeft: 10,
-    backgroundColor: "#CBB279",
-    height: 40,
+  VerticalSpace: {
+    width: "5%",
+    height: "100%",
   },
 });
 
