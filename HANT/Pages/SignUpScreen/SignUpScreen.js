@@ -46,12 +46,12 @@ const SignUpScreen = ({ navigation }) => {
           return response.json();
         })
         .then((res) => {
-          if (res.Data === "Done") {
+          if (res.message === "Done") {
             setPending(false);
             navigation.navigate("Sign In");
           } else {
             setPending(false);
-            alert("Error");
+            alert(res.message);
           }
         })
         .catch((error) => {
