@@ -1,152 +1,149 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, FlatList , Button, TextInput, Pressable} from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  FlatList,
+  Button,
+  TextInput,
+} from "react-native";
 import config from "../../Config/config";
+import AppLoader from "../AppLoader";
 
 const ListScreen = ({ route, navigation }) => {
   const [items, setItems] = useState([]);
   const [name, setName] = useState("");
-  const [note, setNote] = useState("")
-  const nameHandler = (value) => setName(value)
-  const noteHandler = (value) => setNote(value)
+  const [pending, setPending] = useState(false);
+  const [note, setNote] = useState("");
+  const nameHandler = (value) => setName(value);
+  const noteHandler = (value) => setNote(value);
 
   useEffect(() => {
-    console.log(route.params.id)
-    fetch(config.BASE_URL + "/circuit/" + route.params.id, {
+    setPending(true);
+    fetch(config.BASE_URL + "/list/" + route.params.id, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
         Authorization: "Bearer " + route.params.token,
-      },})
-    .then((res) => res.json())
-    .then((response) => {
-      setName(response.name)
-      setNote(response.note)
+      },
     })
+      .then((res) => res.json())
+      .then((response) => {
+        setName(response.name);
+        setNote(response.note);
+        setPending(false);
+      });
+    setPending(true);
     fetch(config.BASE_URL + "/item/" + route.params.id)
-
       .then((res) => res.json())
       .then((response) => {
         setItems(response);
+        setPending(false);
       });
   }, []);
 
   const edit = () => {
+    setPending(true);
     fetch(config.BASE_URL + "/list/" + route.params.id, {
       method: "PUT",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
         name,
-        note
-      })
+        note,
+      }),
     })
-  }
-  function deleteItem(id) {
-    console.log(id)
-    fetch(config.BASE_URL + "/item/" + id , {method : 'DELETE'})
+      .then((res) => res.json())
       .then((response) => {
-          fetch(config.BASE_URL + "/item/" + route.params.id)
+        setPending(false);
+      });
+  };
+  function deleteItem(id) {
+    console.log(id);
+    setPending(true);
+    fetch(config.BASE_URL + "/item/" + id, { method: "DELETE" }).then(
+      (response) => {
+        fetch(config.BASE_URL + "/item/" + route.params.id)
           .then((res) => res.json())
           .then((result) => {
-          setItems(result);
-        });
-      });
+            setItems(result);
+            setPending(false);
+          });
+      }
+    );
   }
 
-  const addItem = ()=>{
-    navigation.navigate("Components",{
-      token:route.params.token,
-      mode:2,
-      listId: route.params.id
-    })
-  }
-
-  const componenetPressed = (componentId) => { 
-    navigation.navigate("ViewItemScreen", {
-      token:route.params.token,
-      id: componentId,
-      listId:route.params.id,
-      mode:route.params.mode
+  const addItem = () => {
+    navigation.navigate("Components", {
+      token: route.params.token,
+      mode: 2,
+      listId: route.params.id,
     });
   };
-  const copy = () => {
-    fetch(config.BASE_URL + "/list/copy/" + route.params.id,{
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + route.params.token,
-      },
-    }).then((res) => res.json())
-    .then ((result) => {
-      alert(result.message)
-    })
-    navigation.navigate("MyListsScreen",{
-      token:route.params.token,
-      mode:2,
-    })
-  }
-  return (
-    <View style={styles.appContainer}>
-      <View>
-        <TextInput
-          style={styles.textInputContainer}
-          placeholder="Name"
-          value={name}
-          onChangeText={nameHandler}
-          onEndEditing={edit}
-        />
-        <TextInput
-          style={styles.textInputContainer2}
-          placeholder="Note..."
-          value={note}
-          onChangeText={noteHandler}
-          onEndEditing={edit}
-        />
-      </View>
-      <FlatList
-        data={items}
-        renderItem={(itemData) => {
-          return (
-            <Pressable
-              onPress={() => {
-                componenetPressed(itemData.item.component_id);
-              }}
-            >
-            <View style={styles.goalItem}>
-              <View style={styles.ListsContainer}>
-                <Text style={styles.listTextContainer}>{itemData.item.name}</Text>
-                <Text style={styles.listTextContainer}>{itemData.item.quantity}</Text>
-                <Button title="-" onPress={()=>{
-                  deleteItem(itemData.item.id)
-                }}></Button>
-              </View>
-            </View>
-            
-            </Pressable>       
-          );
-        }}
 
-        keyExtractor={(item, index) => {
-          return item.id;
-        }}
-      />
-      {route.params.mode == 2? (
-        <View>
-        <Button title="Add to List" onPress={()=>{
-          addItem();
-        }}></Button>
-      </View>
+  return (
+    <View>
+      {!pending ? (
+        <View style={styles.appContainer}>
+          <View>
+            <TextInput
+              style={styles.textInputContainer}
+              placeholder="Name"
+              value={name}
+              onChangeText={nameHandler}
+              onEndEditing={edit}
+            />
+            <TextInput
+              style={styles.textInputContainer2}
+              placeholder="Note..."
+              value={note}
+              onChangeText={noteHandler}
+              onEndEditing={edit}
+            />
+          </View>
+          <FlatList
+            data={items}
+            renderItem={(itemData) => {
+              return (
+                <View style={styles.goalItem}>
+                  <View style={styles.ListsContainer}>
+                    <Text style={styles.listTextContainer}>
+                      {itemData.item.name}
+                    </Text>
+                    <Text style={styles.listTextContainer}>
+                      {itemData.item.quantity}
+                    </Text>
+                    <Button
+                      title="-"
+                      onPress={() => {
+                        deleteItem(itemData.item.id);
+                      }}
+                    ></Button>
+                  </View>
+                </View>
+              );
+            }}
+            keyExtractor={(item, index) => {
+              return item.id;
+            }}
+          />
+          <View>
+            <Button
+              title="Add to List"
+              onPress={() => {
+                addItem();
+              }}
+            ></Button>
+          </View>
+        </View>
       ) : (
-        <View>
-        <Button title="Copy to My Lists" onPress={()=>{
-          copy();
-        }}></Button>
-      </View>
+        <AppLoader />
       )}
     </View>
   );
 };
+
 export default ListScreen;
 const styles = StyleSheet.create({
   appContainer: {
@@ -184,7 +181,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     width: "90%",
     margin: 5,
-    paddingLeft: 10
+    paddingLeft: 10,
   },
   textInputContainer2: {
     borderColor: "grey",
@@ -193,7 +190,7 @@ const styles = StyleSheet.create({
     width: "90%",
     margin: 5,
     height: 100,
-    paddingLeft: 10
+    paddingLeft: 10,
   },
   addGoal: {
     borderWidth: 1,
@@ -210,7 +207,7 @@ const styles = StyleSheet.create({
   },
   goalItem: {
     margin: 8,
-    paddinf: 8,
+    padding: 8,
     borderRadius: 6,
     backgroundColor: "#537188",
     color: "white",
@@ -225,9 +222,9 @@ const styles = StyleSheet.create({
   ListsContainer: {
     flexDirection: "row",
     padding: 15,
-    borderBottomWidth: 1,      
+    borderBottomWidth: 1,
   },
   listTextContainer: {
     color: "white",
-  }
+  },
 });

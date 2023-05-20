@@ -107,6 +107,7 @@ const ViewItemScreen = ({ navigation, route }) => {
     navigation.navigate("ListScreen", {
       id: ListId,
       token: route.params.token,
+      mode: 2
     });
   };
 
