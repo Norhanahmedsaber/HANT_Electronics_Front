@@ -66,12 +66,12 @@ const SignUpScreen = ({ navigation }) => {
         <View style={styles.PageContainer}>
           <View style={styles.RowContainer}>
             <View style={styles.TitleContainer}>
-              <Text>Mail :</Text>
+              <Text>Email :</Text>
             </View>
             <View style={styles.VerticalSpace}></View>
             <TextInput
               style={styles.InputContainer}
-              placeholder="   Enter Your Mail"
+              placeholder="Enter Your Email"
               onChangeText={emailChanged}
             ></TextInput>
           </View>
@@ -80,14 +80,14 @@ const SignUpScreen = ({ navigation }) => {
 
           <View style={styles.RowContainer}>
             <View style={styles.TitleContainer}>
-              <Text>User Name :</Text>
+              <Text>Username :</Text>
             </View>
 
             <View style={styles.VerticalSpace}></View>
 
             <TextInput
               style={styles.InputContainer}
-              placeholder="   Enter User Name"
+              placeholder="Enter Your Username"
               onChangeText={usernameChanged}
             ></TextInput>
           </View>
@@ -101,7 +101,7 @@ const SignUpScreen = ({ navigation }) => {
             <View style={styles.VerticalSpace}></View>
             <TextInput
               style={styles.InputContainer}
-              placeholder="   Enter Your Password"
+              placeholder="Enter Your Password"
               onChangeText={passwordChanged}
             ></TextInput>
           </View>
@@ -110,6 +110,20 @@ const SignUpScreen = ({ navigation }) => {
 
           <View style={styles.SignUpButton}>
             <Button onPress={signUpClicked} title="Sign Up"></Button>
+          </View>
+          <View style={styles.SignInScreen}>
+            <View>
+              <Text>Already Have an Account? </Text>
+            </View>
+
+            <View style={styles.SignUp}>
+              <Text
+                onPress={() => navigation.navigate("Sign In")}
+                style={styles.SignIn}
+              >
+                Login
+              </Text>
+            </View>
           </View>
         </View>
       ) : (
@@ -134,23 +148,31 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "100%",
   },
+  SignIn: {
+    color: "blue",
+  },
   RowContainer: {
     flexDirection: "row",
     width: "100%",
     height: "8%",
   },
   TitleContainer: {
-    width: "25%",
+    width: "23%",
     justifyContent: "center",
     height: "100%",
+  },
+  SignInScreen: {
+    flexDirection: "row",
+    width: "100%",
   },
 
   InputContainer: {
     borderColor: "grey",
     borderRadius: 0,
     borderWidth: 1,
-    width: "70%",
+    width: "72%",
     height: "100%",
+    paddingLeft: 10
   },
 
   SignUpButton: {

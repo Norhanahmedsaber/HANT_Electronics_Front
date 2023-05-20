@@ -94,7 +94,7 @@ const LoginScreen = ({ navigation }) => {
           />
           <View style={styles.HorizontalSpace}></View>
           <View style={styles.SignInContainer}>
-            <Button title="Sign In" onPress={login} />
+            <Button title="Login" onPress={login} />
           </View>
           <View style={styles.HorizontalSpace}></View>
           <View style={styles.GuestContainer}>
@@ -103,7 +103,7 @@ const LoginScreen = ({ navigation }) => {
           <View style={styles.HorizontalSpace}></View>
           <View style={styles.SignUpContainer}>
             <View>
-              <Text>I dont have an account </Text>
+              <Text>Don't Have an Account? </Text>
             </View>
 
             <View style={styles.SignUp}>
@@ -111,7 +111,6 @@ const LoginScreen = ({ navigation }) => {
                 onPress={() => navigation.navigate("Sign Up")}
                 style={styles.SignUp}
               >
-                {" "}
                 Sign Up
               </Text>
             </View>
